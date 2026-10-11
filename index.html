@@ -38,8 +38,7 @@
   header { text-align: center; margin-bottom: 36px; }
   .intestazione { display: block; width: 100%; height: auto; margin: 0 auto 8px; }
   .testata-mobile { display: none; }
-  @media (max-width: 560px) { .intestazione { display: none; } .testata-mobile { display: block; } }
-  header .testata-mobile img { width: 132px; height: auto; display: block; margin: 0 auto 14px; }
+  @media (max-width: 560px) { .intestazione { display: none; } .testata-mobile { display: block; width: 100%; max-width: 420px; height: auto; margin: 0 auto; } }
   .nome { font-size: 15px; letter-spacing: .14em; text-transform: uppercase; color: var(--blu); font-weight: 400; }
   .ebraico { font-size: 18px; color: var(--blu-2); margin-top: 2px; direction: rtl; }
   .slogan { font-size: 13px; letter-spacing: .08em; color: var(--grigio); margin-top: 6px; }
@@ -132,10 +131,6 @@
     .nome { font-size: 3vw; letter-spacing: .05em; white-space: nowrap; }
     .ebraico { font-size: 4vw; }
     .slogan { font-size: 2.7vw; letter-spacing: .03em; white-space: nowrap; }
-    .testata-mobile img { width: 116px; margin-bottom: 10px; }
-    .testata-mobile .nome, .testata-mobile .ebraico, .testata-mobile .slogan { line-height: 1.3; }
-    .testata-mobile .ebraico { margin-top: 1px; }
-    .testata-mobile .slogan { margin-top: 3px; }
     body { font-size: 15px; }
     .chai { font-size: 56px; }
     h1 { font-size: 28px; }
@@ -159,12 +154,7 @@
 
   <header>
     <img class="intestazione" src="intestazione.svg" alt="Associazione Italia Israele • Alessandria · עמותת איטליה־ישראל אלסנדריה · Dialogo, Conoscenza, Collaborazione, Futuro">
-    <div class="testata-mobile">
-      <img src="logo.svg" alt="Logo dell'Associazione Italia Israele di Alessandria" onerror="this.style.display='none'">
-      <div class="nome">Associazione Italia Israele • Alessandria</div>
-      <div class="ebraico" lang="he">עמותת איטליה־ישראל אלסנדריה</div>
-      <div class="slogan">Dialogo · Conoscenza · Collaborazione · Futuro</div>
-    </div>
+    <img class="testata-mobile" src="intestazione-verticale.svg" alt="Associazione Italia Israele • Alessandria · עמותת איטליה־ישראל אלסנדריה · Dialogo, Conoscenza, Collaborazione, Futuro">
   </header>
 
   <section id="sezione-modulo">

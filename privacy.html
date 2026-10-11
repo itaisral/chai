@@ -15,8 +15,7 @@
   header { text-align:center; margin-bottom:32px; }
   .intestazione { display:block; width:100%; max-width:560px; height:auto; margin:0 auto; }
   .testata-mobile { display:none; }
-  @media (max-width:560px) { .intestazione { display:none; } .testata-mobile { display:block; } }
-  header .testata-mobile img { width:96px; height:auto; display:block; margin:0 auto 12px; }
+  @media (max-width:560px) { .intestazione { display:none; } .testata-mobile { display:block; width:100%; max-width:420px; height:auto; margin:0 auto; } }
   .nome { font-size:14px; letter-spacing:.14em; text-transform:uppercase; color:var(--blu); font-weight:400; }
   h1 { font-weight:300; font-size:30px; line-height:1.2; color:var(--blu); text-align:center; margin:0 0 8px; }
   .sotto { text-align:center; color:var(--grigio); font-size:14px; margin-bottom:36px; }
@@ -34,10 +33,7 @@
 
   <header>
     <img class="intestazione" src="intestazione.svg" alt="Associazione Italia Israele • Alessandria">
-    <div class="testata-mobile">
-      <img src="logo.svg" alt="" onerror="this.style.display='none'">
-      <div class="nome">Associazione Italia Israele • Alessandria</div>
-    </div>
+    <img class="testata-mobile" src="intestazione-verticale.svg" alt="Associazione Italia Israele • Alessandria">
   </header>
 
   <h1>Informativa sul trattamento dei dati personali</h1>
