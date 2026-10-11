@@ -1,0 +1,406 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Tesseramento · Associazione Italia Israele Alessandria</title>
+<meta name="description" content="Diventa socio dell'Associazione Italia Israele di Alessandria.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Titillium+Web:wght@300;400;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --blu: #18304e;
+    --blu-2: #224774;
+    --oro: #d1b38f;
+    --oro-chiaro: #f2e3ce;
+    --rosso: #b12218;
+    --verde: #1c5430;
+    --testo: #1f2023;
+    --grigio: #6b6f76;
+    --linea: #e4ddd1;
+    --fondo: #fbf8f2;
+    --carta: #ffffff;
+    --raggio: 10px;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; }
+  body {
+    background: var(--fondo);
+    color: var(--testo);
+    font-family: "Titillium Web", system-ui, sans-serif;
+    font-weight: 300;
+    font-size: 17px;
+    line-height: 1.6;
+  }
+  .pagina { max-width: 720px; margin: 0 auto; padding: 32px 16px 64px; }
+
+  header { text-align: center; margin-bottom: 36px; }
+  header img { width: 132px; height: auto; display: block; margin: 0 auto 14px; }
+  .nome { font-size: 15px; letter-spacing: .14em; text-transform: uppercase; color: var(--blu); font-weight: 400; }
+  .ebraico { font-size: 18px; color: var(--blu-2); margin-top: 2px; direction: rtl; }
+  .slogan { font-size: 13px; letter-spacing: .08em; color: var(--grigio); margin-top: 6px; }
+
+  h1 { font-weight: 300; font-size: 34px; line-height: 1.2; color: var(--blu); margin: 0 0 14px; text-align: center; }
+  .intro { text-align: left; max-width: 560px; margin: 0 auto 36px; }
+  .chai { text-align: center; font-size: 64px; line-height: 1; color: var(--rosso); font-weight: 400; margin: 0 0 10px; }
+
+  form { display: grid; gap: 28px; }
+  fieldset { border: 0; padding: 0; margin: 0; }
+  legend { font-weight: 400; font-size: 13px; letter-spacing: .12em; text-transform: uppercase; color: var(--blu); margin-bottom: 12px; padding: 0; }
+
+  .fasce { display: grid; gap: 10px; }
+  .fascia {
+    display: grid; grid-template-columns: auto 1fr auto; gap: 14px; align-items: center;
+    background: var(--carta); border: 1px solid var(--linea); border-radius: var(--raggio);
+    padding: 14px 16px; cursor: pointer; transition: border-color .15s, box-shadow .15s;
+  }
+  .fascia:hover { border-color: var(--oro); }
+  .fascia input { accent-color: var(--blu); width: 18px; height: 18px; margin: 0; }
+  .fascia:has(input:checked) { border-color: var(--blu); box-shadow: 0 0 0 1px var(--blu); }
+  .fascia .titolo { font-weight: 400; color: var(--blu); }
+  .fascia .nota { font-size: 14px; color: var(--grigio); line-height: 1.4; }
+  .fascia .prezzo { font-size: 22px; color: var(--blu); white-space: nowrap; }
+
+  .riquadro { background: var(--carta); border: 1px solid var(--linea); border-radius: var(--raggio); padding: 18px 16px; display: grid; gap: 14px; }
+  .riga { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  @media (max-width: 560px) { .riga { grid-template-columns: 1fr; } }
+  label.campo { display: grid; gap: 4px; font-size: 14px; font-weight: 400; color: var(--blu); }
+  label.campo small { font-weight: 300; color: var(--grigio); font-size: 13px; }
+  input[type=text], input[type=email], input[type=tel], input[type=date], input[type=number], select {
+    font: inherit; font-weight: 300; color: var(--testo); width: 100%;
+    padding: 10px 12px; border: 1px solid var(--linea); border-radius: 8px; background: #fff;
+  }
+  input:focus, select:focus { outline: 2px solid var(--blu-2); outline-offset: 1px; border-color: transparent; }
+  .nascosto { display: none !important; }
+
+  .spunte { display: grid; gap: 12px; }
+  .spunta { display: grid; grid-template-columns: auto 1fr; gap: 10px; align-items: start; font-size: 15px; }
+  .spunta input { accent-color: var(--blu); width: 18px; height: 18px; margin-top: 4px; }
+  .spunta a { color: var(--blu-2); }
+  .obbl { color: var(--rosso); }
+  .gruppo-nota { font-size: 12px; font-weight: 400; letter-spacing: .1em; text-transform: uppercase; color: var(--blu-2); }
+  .consenso { background: var(--carta); border: 1px solid var(--linea); border-radius: var(--raggio); padding: 14px 16px; display: grid; gap: 10px; }
+  .consenso .frase { font-size: 15px; }
+  .scelte { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  .scelte label { display: flex; align-items: center; gap: 8px; justify-content: center; font-size: 15px; font-weight: 400; color: var(--blu);
+    border: 1px solid var(--linea); border-radius: 8px; padding: 8px 10px; cursor: pointer; }
+  .scelte input { accent-color: var(--blu); margin: 0; }
+  .scelte label:has(input:checked) { border-color: var(--blu); background: #f3f5f9; }
+
+  .trappola { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
+
+  .riepilogo { text-align: center; font-size: 15px; color: var(--grigio); }
+  .riepilogo strong { color: var(--blu); font-weight: 600; font-size: 20px; }
+  button {
+    font: inherit; font-weight: 400; font-size: 17px; letter-spacing: .06em;
+    background: var(--blu); color: #fff; border: 0; border-radius: var(--raggio);
+    padding: 14px 20px; width: 100%; cursor: pointer;
+  }
+  button:hover { background: var(--blu-2); }
+  button:disabled { opacity: .6; cursor: wait; }
+  .errore { color: var(--rosso); font-size: 15px; text-align: center; min-height: 1em; }
+
+  .esito { text-align: center; }
+  .numero { font-size: 64px; line-height: 1; color: var(--blu); margin: 8px 0 4px; letter-spacing: .04em; }
+  .esito .sotto { color: var(--grigio); margin-bottom: 28px; }
+  .pagamenti { display: grid; gap: 10px; text-align: left; }
+  .pagamento { background: var(--carta); border: 1px solid var(--linea); border-radius: var(--raggio); padding: 14px 16px; }
+  .pagamento .titolo { font-weight: 400; color: var(--blu); }
+  .pagamento code { font-family: inherit; font-weight: 400; background: var(--oro-chiaro); padding: 1px 6px; border-radius: 4px; word-break: break-all; }
+  .pagamento a { color: var(--blu-2); }
+
+  footer { margin-top: 48px; text-align: center; font-size: 13px; color: var(--grigio); }
+  footer a { color: var(--grigio); }
+</style>
+</head>
+<body>
+<div class="pagina">
+
+  <header>
+    <img src="logo.svg" alt="Logo dell'Associazione Italia Israele di Alessandria" onerror="this.style.display='none'">
+    <div class="nome">Associazione Italia Israele • Alessandria</div>
+    <div class="ebraico" lang="he">עמותת איטליה־ישראל אלסנדריה</div>
+    <div class="slogan">Dialogo · Conoscenza · Collaborazione · Futuro</div>
+  </header>
+
+  <section id="sezione-modulo">
+    <div class="chai" lang="he" dir="rtl">חי</div>
+    <h1>Diventa socio</h1>
+    <div class="intro">
+      <p>Chet e yod, otto e dieci.<br>
+      Sommate fanno diciotto.<br>
+      Lette insieme dicono <span lang="he" dir="rtl">חי</span> (<em>chai</em>).<br>
+      Vita.</p>
+      <p>È la parola del brindisi, <span lang="he" dir="rtl">לחיים</span> (<em>lechaim</em>), che si alza alle nozze, alle nascite e perfino nell'anniversario dei propri morti.</p>
+      <p>Il popolo ebraico l'ha portata con sé attraverso i secoli, nei giorni di festa e in quelli più bui, fino a farne un grido:<br>
+      <span lang="he" dir="rtl">עם ישראל חי</span> (<em>Am Israel chai</em>).<br>
+      Il popolo d'Israele vive.</p>
+      <p>Per questo si dona in multipli di diciotto, e così abbiamo fatto anche noi.<br>
+      Ogni tessera è un piccolo brindisi alla vita, che ha sempre l'ultima parola.</p>
+      <p>I primi cento soci di questa nuova stagione avranno un numero di tessera da 001 a 100, che resta loro finché rinnovano.</p>
+    </div>
+
+    <form id="modulo" novalidate>
+
+      <fieldset>
+        <legend>Scegli la tua quota</legend>
+        <div class="fasce" id="fasce"></div>
+        <div class="riquadro nascosto" id="extra-benemerito" style="margin-top:10px">
+          <label class="campo">Importo che desideri versare
+            <input type="number" name="importo_libero" id="importo_libero" min="360" step="1" value="360" inputmode="numeric">
+            <small>Minimo 360 €. Se vuoi restare nel chai, 540, 720 o 1.800.</small>
+          </label>
+        </div>
+        <div class="riquadro nascosto" id="extra-familiare" style="margin-top:10px">
+          <label class="campo">Nome e cognome del familiare già socio
+            <input type="text" name="familiare" id="familiare" autocomplete="off">
+            <small>La quota familiare vale per il secondo componente dello stesso nucleo.</small>
+          </label>
+        </div>
+      </fieldset>
+
+      <fieldset>
+        <legend>I tuoi dati</legend>
+        <div class="riquadro">
+          <div class="riga">
+            <label class="campo">Nome <input type="text" name="nome" id="nome" autocomplete="given-name" required></label>
+            <label class="campo">Cognome <input type="text" name="cognome" id="cognome" autocomplete="family-name" required></label>
+          </div>
+          <div class="riga">
+            <label class="campo">Email <input type="email" name="email" id="email" autocomplete="email" required></label>
+            <label class="campo">Cellulare <input type="tel" name="cellulare" id="cellulare" autocomplete="tel" required></label>
+          </div>
+          <label class="campo">Indirizzo <input type="text" name="indirizzo" id="indirizzo" autocomplete="street-address" required></label>
+          <div class="riga">
+            <label class="campo">CAP <input type="text" name="cap" id="cap" autocomplete="postal-code" inputmode="numeric" maxlength="5" required></label>
+            <label class="campo">Comune <input type="text" name="comune" id="comune" autocomplete="address-level2" required></label>
+          </div>
+          <label class="campo nascosto" id="campo-nascita">Data di nascita
+            <input type="date" name="nascita" id="nascita">
+            <small>Serve solo per verificare la fascia giovani.</small>
+          </label>
+          <label class="campo nascosto" id="campo-cf">Codice fiscale
+            <input type="text" name="cf" id="cf" maxlength="16" autocomplete="off" style="text-transform:uppercase">
+            <small>Serve per intestarti la ricevuta della donazione.</small>
+          </label>
+          <label class="campo">Come ci hai conosciuto?
+            <select name="fonte" id="fonte">
+              <option value="">Scegli…</option>
+              <option>Un amico o un socio</option>
+              <option>Facebook</option>
+              <option>Instagram</option>
+              <option>Una cena o un evento</option>
+              <option>Giornali o radio</option>
+              <option>Altro</option>
+            </select>
+          </label>
+          <div class="trappola" aria-hidden="true">
+            <label>Lascia vuoto <input type="text" name="sito" id="sito" tabindex="-1" autocomplete="off"></label>
+          </div>
+        </div>
+      </fieldset>
+
+      <fieldset>
+        <legend>Dichiarazioni</legend>
+        <div class="spunte">
+          <div class="gruppo-nota">Obbligatorie</div>
+          <label class="spunta"><input type="checkbox" id="statuto" required>
+            <span>Chiedo di aderire all'associazione, ne condivido le finalità e mi impegno a rispettarne lo <a href="statuto.pdf" target="_blank" rel="noopener">statuto</a>. <span class="obbl">*</span></span></label>
+          <label class="spunta"><input type="checkbox" id="privacy" required>
+            <span>Ho letto l'<a href="privacy.html" target="_blank" rel="noopener">informativa sulla privacy</a> e acconsento al trattamento dei miei dati per la gestione dell'iscrizione. <span class="obbl">*</span></span></label>
+          <div class="gruppo-nota" style="margin-top:12px">Facoltative</div>
+          <div class="consenso">
+            <div class="frase">Pubblicazione del mio nome nell'albo dei soci del rilancio.</div>
+            <div class="scelte">
+              <label><input type="radio" name="albo" value="si"> Acconsento</label>
+              <label><input type="radio" name="albo" value="no"> Non acconsento</label>
+            </div>
+          </div>
+          <div class="consenso">
+            <div class="frase">Uso di foto e video degli eventi in cui posso comparire.</div>
+            <div class="scelte">
+              <label><input type="radio" name="immagini" value="si"> Acconsento</label>
+              <label><input type="radio" name="immagini" value="no"> Non acconsento</label>
+            </div>
+          </div>
+          <div class="consenso">
+            <div class="frase">Invio della newsletter mensile al mio indirizzo email.</div>
+            <div class="scelte">
+              <label><input type="radio" name="newsletter" value="si"> Acconsento</label>
+              <label><input type="radio" name="newsletter" value="no"> Non acconsento</label>
+            </div>
+          </div>
+        </div>
+      </fieldset>
+
+      <div class="riepilogo" id="riepilogo"></div>
+      <button type="submit" id="invia">Invia la domanda di adesione</button>
+      <div class="errore" id="errore" role="alert"></div>
+    </form>
+  </section>
+
+  <section id="sezione-esito" class="esito nascosto" aria-live="polite">
+    <h1>Benvenuto</h1>
+    <div>La tua tessera porta il numero</div>
+    <div class="numero" id="esito-numero">026</div>
+    <div class="sotto">Ti abbiamo mandato una mail di conferma. Il numero diventa definitivo quando riceviamo la quota di <strong id="esito-importo"></strong>.</div>
+    <div class="pagamenti" id="pagamenti"></div>
+  </section>
+
+  <footer>
+    Associazione Italia Israele • Alessandria · <a href="mailto:italia.israele.al@gmail.com">italia.israele.al@gmail.com</a>
+  </footer>
+</div>
+
+<script>
+/* ===== Da compilare prima della pubblicazione ===== */
+const CONFIG = {
+  scriptUrl: "https://script.google.com/macros/s/AKfycbzFYbCpoZimTdvpAxVC317WNIetut5U4ZqZiouJqHSp7VpubdsS5XxadIZyXqLHXPA6/exec",
+  annoSociale: "2027",
+  iban: "IT37 O360 8105 1382 9683 6696 867",
+  intestatario: "Associazione Italia Israele Alessandria",
+  satispay: "",             // link Satispay Business, se attivo
+  paypal: ""                // link PayPal o pagamento con carta, se attivo
+};
+/* ================================================== */
+
+const FASCE = [
+  { id: "giovani",     titolo: "Giovani",     nota: "Fino a 25 anni compiuti.", importo: 18 },
+  { id: "familiare",   titolo: "Familiare",   nota: "Per il secondo componente di un nucleo con già un socio.", importo: 36 },
+  { id: "ordinario",   titolo: "Ordinario",   nota: "Il triplo chai.", importo: 54 },
+  { id: "sostenitore", titolo: "Sostenitore", nota: "Dieci volte chai. 54 € di quota, il resto è una donazione.", importo: 180 },
+  { id: "benemerito",  titolo: "Benemerito",  nota: "Da 360 € in su, per chi vuole sostenerci di più.", importo: 360, libero: true }
+];
+const QUOTA_BASE = 54;
+
+const $ = id => document.getElementById(id);
+const euro = n => n.toLocaleString("it-IT") + " €";
+
+$("fasce").innerHTML = FASCE.map(f => `
+  <label class="fascia">
+    <input type="radio" name="fascia" value="${f.id}" ${f.id === "ordinario" ? "checked" : ""}>
+    <span><span class="titolo">${f.titolo}</span><br><span class="nota">${f.nota}</span></span>
+    <span class="prezzo">${f.libero ? "da " : ""}${f.importo} €</span>
+  </label>`).join("");
+
+function fasciaScelta() {
+  const v = document.querySelector('input[name=fascia]:checked').value;
+  return FASCE.find(f => f.id === v);
+}
+function importoDovuto() {
+  const f = fasciaScelta();
+  if (f.libero) return Math.max(360, Math.round(Number($("importo_libero").value) || 0));
+  return f.importo;
+}
+function aggiorna() {
+  const f = fasciaScelta();
+  $("extra-benemerito").classList.toggle("nascosto", f.id !== "benemerito");
+  $("extra-familiare").classList.toggle("nascosto", f.id !== "familiare");
+  $("campo-nascita").classList.toggle("nascosto", f.id !== "giovani");
+  $("campo-cf").classList.toggle("nascosto", !(f.id === "sostenitore" || f.id === "benemerito"));
+  const tot = importoDovuto();
+  let testo = `Quota ${f.titolo.toLowerCase()} <strong>${euro(tot)}</strong>`;
+  if (tot > QUOTA_BASE && f.id !== "familiare" && f.id !== "giovani") {
+    testo += `<br>${euro(QUOTA_BASE)} di quota associativa e ${euro(tot - QUOTA_BASE)} di donazione`;
+  }
+  $("riepilogo").innerHTML = testo;
+}
+document.addEventListener("change", aggiorna);
+$("importo_libero").addEventListener("input", aggiorna);
+aggiorna();
+
+function eta(data) {
+  const n = new Date(data), oggi = new Date();
+  let e = oggi.getFullYear() - n.getFullYear();
+  const m = oggi.getMonth() - n.getMonth();
+  if (m < 0 || (m === 0 && oggi.getDate() < n.getDate())) e--;
+  return e;
+}
+const CF_RE = /^[A-Z]{6}[0-9LMNPQRSTUV]{2}[ABCDEHLMPRST][0-9LMNPQRSTUV]{2}[A-Z][0-9LMNPQRSTUV]{3}[A-Z]$/;
+
+function valida() {
+  const f = fasciaScelta();
+  const obblig = ["nome", "cognome", "email", "cellulare", "indirizzo", "cap", "comune"];
+  for (const id of obblig) if (!$(id).value.trim()) { $(id).focus(); return "Mancano alcuni dati obbligatori."; }
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test($("email").value.trim())) { $("email").focus(); return "L'indirizzo email non sembra corretto."; }
+  if (!/^\d{5}$/.test($("cap").value.trim())) { $("cap").focus(); return "Il CAP deve avere cinque cifre."; }
+  if (f.id === "giovani") {
+    if (!$("nascita").value) { $("nascita").focus(); return "Per la fascia giovani serve la data di nascita."; }
+    if (eta($("nascita").value) >= 26) { $("nascita").focus(); return "La fascia giovani è riservata a chi non ha ancora compiuto 26 anni."; }
+  }
+  if (f.id === "familiare" && !$("familiare").value.trim()) { $("familiare").focus(); return "Indica il familiare già socio."; }
+  if (f.id === "sostenitore" || f.id === "benemerito") {
+    const cf = $("cf").value.trim().toUpperCase();
+    if (!CF_RE.test(cf)) { $("cf").focus(); return "Il codice fiscale non sembra corretto."; }
+  }
+  if (!$("statuto").checked || !$("privacy").checked) return "Per aderire servono le due dichiarazioni obbligatorie.";
+  for (const n of ["albo", "immagini", "newsletter"]) {
+    if (!document.querySelector(`input[name=${n}]:checked`)) return "Indica se acconsenti o no per ciascuna delle tre voci facoltative.";
+  }
+  return "";
+}
+
+const scelta = n => (document.querySelector(`input[name=${n}]:checked`) || {}).value === "si";
+
+function datiModulo() {
+  const f = fasciaScelta();
+  const tot = importoDovuto();
+  const quota = (f.id === "giovani" || f.id === "familiare") ? tot : QUOTA_BASE;
+  return {
+    fascia: f.id, importo: tot, quota: quota, liberalita: tot - quota,
+    nome: $("nome").value.trim(), cognome: $("cognome").value.trim(),
+    email: $("email").value.trim(), cellulare: $("cellulare").value.trim(),
+    indirizzo: $("indirizzo").value.trim(), cap: $("cap").value.trim(), comune: $("comune").value.trim(),
+    nascita: f.id === "giovani" ? $("nascita").value : "",
+    cf: (f.id === "sostenitore" || f.id === "benemerito") ? $("cf").value.trim().toUpperCase() : "",
+    familiare: f.id === "familiare" ? $("familiare").value.trim() : "",
+    fonte: $("fonte").value,
+    consenso_albo: scelta("albo"), consenso_immagini: scelta("immagini"), consenso_newsletter: scelta("newsletter"),
+    sito: $("sito").value
+  };
+}
+
+function mostraEsito(numero, dati) {
+  const causale = `Quota ${CONFIG.annoSociale} tessera ${numero} ${dati.nome} ${dati.cognome}`;
+  const blocchi = [];
+  blocchi.push(`<div class="pagamento"><div class="titolo">Bonifico</div>
+    IBAN <code>${CONFIG.iban}</code><br>intestato a ${CONFIG.intestatario}<br>causale <code>${causale}</code></div>`);
+  if (CONFIG.satispay) blocchi.push(`<div class="pagamento"><div class="titolo">Satispay</div><a href="${CONFIG.satispay}" target="_blank" rel="noopener">Paga con Satispay</a>, indicando nel messaggio il numero ${numero}.</div>`);
+  if (CONFIG.paypal) blocchi.push(`<div class="pagamento"><div class="titolo">PayPal o carta</div><a href="${CONFIG.paypal}" target="_blank" rel="noopener">Paga online</a>, indicando nella nota il numero ${numero}.</div>`);
+  blocchi.push(`<div class="pagamento"><div class="titolo">Di persona</div>In contanti o con carta alla prossima cena o al prossimo incontro dell'associazione.</div>`);
+  $("pagamenti").innerHTML = blocchi.join("");
+  $("esito-numero").textContent = numero;
+  $("esito-importo").textContent = euro(dati.importo);
+  $("sezione-modulo").classList.add("nascosto");
+  $("sezione-esito").classList.remove("nascosto");
+  window.scrollTo({ top: 0, behavior: "smooth" });
+}
+
+$("modulo").addEventListener("submit", async e => {
+  e.preventDefault();
+  $("errore").textContent = "";
+  const err = valida();
+  if (err) { $("errore").textContent = err; return; }
+  const dati = datiModulo();
+  const btn = $("invia");
+  btn.disabled = true; btn.textContent = "Invio in corso…";
+  try {
+    let numero;
+    if (!CONFIG.scriptUrl) {
+      numero = "026"; // anteprima, nessun dato viene inviato
+    } else {
+      const r = await fetch(CONFIG.scriptUrl, { method: "POST", headers: { "Content-Type": "text/plain;charset=utf-8" }, body: JSON.stringify(dati) });
+      const j = await r.json();
+      if (!j.ok) throw new Error(j.errore || "Errore");
+      numero = j.numero;
+    }
+    mostraEsito(numero, dati);
+  } catch (x) {
+    $("errore").textContent = "Non siamo riusciti a registrare la domanda. Riprova tra poco o scrivici a italia.israele.al@gmail.com.";
+    btn.disabled = false; btn.textContent = "Invia la domanda di adesione";
+  }
+});
+</script>
+</body>
+</html>
