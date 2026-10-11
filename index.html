@@ -52,6 +52,15 @@
   fieldset { border: 0; padding: 0; margin: 0; }
   legend { font-weight: 400; font-size: 13px; letter-spacing: .12em; text-transform: uppercase; color: var(--blu); margin-bottom: 12px; padding: 0; }
 
+  .tipo { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 0 0 32px; }
+  .tipo-scelta { display: grid; justify-items: center; gap: 2px; background: var(--carta); color: var(--blu);
+    border: 1px solid var(--linea); border-radius: var(--raggio); padding: 18px 10px 16px; cursor: pointer; font: inherit; letter-spacing: 0; }
+  .tipo-scelta:hover { background: var(--carta); border-color: var(--oro); }
+  .tipo-scelta[aria-pressed=true] { border-color: var(--blu); box-shadow: 0 0 0 1px var(--blu); background: var(--carta); }
+  .tipo-he { font-family: "Frank Ruhl Libre", serif; font-size: 34px; line-height: 1.1; color: var(--blu); }
+  .tipo-tr { font-size: 15px; color: var(--grigio); line-height: 1.2; }
+  .tipo-it { margin-top: 6px; font-size: 12px; font-weight: 400; letter-spacing: .12em; text-transform: uppercase; color: var(--blu-2); }
+  #tessera { max-width: 120px; }
   .validita { margin: -6px 0 12px; font-size: 14px; color: var(--grigio); }
   .fasce { display: grid; gap: 10px; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); align-items: start; }
   .fascia {
@@ -135,6 +144,9 @@
     .ebraico { font-size: 4vw; }
     .slogan { font-size: 2.7vw; letter-spacing: .03em; white-space: nowrap; }
     body { font-size: 15px; }
+    .tipo-he { font-size: 28px; }
+    .tipo-tr { font-size: 13px; }
+    .tipo-it { font-size: 11px; }
     .chai { font-size: 56px; }
     h1 { font-size: 28px; }
     legend { font-size: 12px; }
@@ -177,7 +189,20 @@
       <p>I primi cento soci di questa nuova stagione sono i soci del rilancio. Avranno un numero di tessera da 001 a 100, che resta loro finché rinnovano, e il loro nome entrerà in un albo che ricorda chi ha creduto nel progetto fin dall'inizio.</p>
     </div>
 
-    <form id="modulo" novalidate>
+    <div class="tipo" role="radiogroup" aria-label="Nuova tessera o rinnovo">
+      <button type="button" class="tipo-scelta" data-tipo="nuovo" aria-pressed="false">
+        <span class="tipo-he" lang="he" dir="rtl">ברוך הבא</span>
+        <span class="tipo-tr"><em>Baruch haba</em></span>
+        <span class="tipo-it">Nuova tessera</span>
+      </button>
+      <button type="button" class="tipo-scelta" data-tipo="rinnovo" aria-pressed="false">
+        <span class="tipo-he" lang="he" dir="rtl">ברוך השב</span>
+        <span class="tipo-tr"><em>Baruch hashav</em></span>
+        <span class="tipo-it">Rinnovo</span>
+      </button>
+    </div>
+
+    <form id="modulo" class="nascosto" novalidate>
 
       <fieldset>
         <legend>Scegli la tua quota</legend>
@@ -200,6 +225,10 @@
       <fieldset>
         <legend>I tuoi dati</legend>
         <div class="riquadro">
+          <label class="campo nascosto" id="campo-tessera">Numero della tua tessera, se lo ricordi
+            <input type="text" name="tessera" id="tessera" inputmode="numeric" maxlength="3" autocomplete="off">
+            <small>Il numero resta quello di sempre. Se non lo ricordi, lo ritroviamo noi.</small>
+          </label>
           <div class="riga">
             <label class="campo">Nome <input type="text" name="nome" id="nome" autocomplete="given-name" required></label>
             <label class="campo">Cognome <input type="text" name="cognome" id="cognome" autocomplete="family-name" required></label>
@@ -229,7 +258,7 @@
             <input type="text" name="cf" id="cf" maxlength="16" autocomplete="off" style="text-transform:uppercase">
             <small>Serve per intestarti la ricevuta della donazione.</small>
           </label>
-          <label class="campo">Come ci hai conosciuto?
+          <label class="campo" id="campo-fonte">Come ci hai conosciuto?
             <select name="fonte" id="fonte">
               <option value="">Scegli…</option>
               <option>Un amico o un socio</option>
@@ -286,10 +315,10 @@
   </section>
 
   <section id="sezione-esito" class="esito nascosto" aria-live="polite">
-    <h1>Benvenuto</h1>
-    <div>La tua tessera porta il numero</div>
+    <h1 id="esito-titolo">Benvenuto</h1>
+    <div id="esito-intro">La tua tessera porta il numero</div>
     <div class="numero" id="esito-numero">026</div>
-    <div class="sotto">Ti abbiamo mandato una mail di conferma. Il numero diventa definitivo quando riceviamo la quota di <strong id="esito-importo"></strong>.</div>
+    <div class="sotto"><span id="esito-nota">Ti abbiamo mandato una mail di conferma. Il numero diventa definitivo quando riceviamo la quota di</span> <strong id="esito-importo"></strong>.</div>
     <div class="pagamenti" id="pagamenti"></div>
   </section>
 
@@ -389,6 +418,7 @@ function valida() {
   const obblig = ["nome", "cognome", "email", "cellulare", "indirizzo", "cap", "comune"];
   for (const id of obblig) if (!$(id).value.trim()) { $(id).focus(); return "Mancano alcuni dati obbligatori."; }
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test($("email").value.trim())) { $("email").focus(); return "L'indirizzo email non sembra corretto."; }
+  if (tipo === "rinnovo" && $("tessera").value.trim() && !/^\d{1,3}$/.test($("tessera").value.trim())) { $("tessera").focus(); return "Il numero di tessera è fatto solo di cifre."; }
   if (!/^\d{5}$/.test($("cap").value.trim())) { $("cap").focus(); return "Il CAP deve avere cinque cifre."; }
   if (f.id === "giovani") {
     if (!$("nascita").value) { $("nascita").focus(); return "Per la fascia giovani serve la data di nascita."; }
@@ -410,6 +440,17 @@ function valida() {
   return "";
 }
 
+let tipo = "";
+document.querySelectorAll(".tipo-scelta").forEach(b => b.addEventListener("click", () => {
+  const primaVolta = !tipo;
+  tipo = b.dataset.tipo;
+  document.querySelectorAll(".tipo-scelta").forEach(x => x.setAttribute("aria-pressed", x === b ? "true" : "false"));
+  $("modulo").classList.remove("nascosto");
+  $("campo-tessera").classList.toggle("nascosto", tipo !== "rinnovo");
+  $("campo-fonte").classList.toggle("nascosto", tipo === "rinnovo");
+  if (primaVolta) $("modulo").scrollIntoView({ behavior: "smooth", block: "start" });
+}));
+
 const scelta = n => (document.querySelector(`input[name=${n}]:checked`) || {}).value === "si";
 
 function datiModulo() {
@@ -417,6 +458,7 @@ function datiModulo() {
   const tot = importoDovuto();
   const quota = (f.id === "giovani" || f.id === "familiare") ? tot : QUOTA_BASE;
   return {
+    tipo: tipo, tessera: tipo === "rinnovo" ? $("tessera").value.trim() : "",
     fascia: f.id, importo: tot, quota: quota, liberalita: tot - quota,
     nome: $("nome").value.trim(), cognome: $("cognome").value.trim(),
     email: $("email").value.trim(), cellulare: $("cellulare").value.trim(),
@@ -426,21 +468,27 @@ function datiModulo() {
     familiare: f.id === "familiare" ? $("familiare").value.trim() : "",
     genitore: minore() ? $("genitore").value.trim() : "",
     dichiarazione_genitore: minore() ? $("dich-genitore").checked : false,
-    fonte: $("fonte").value,
+    fonte: tipo === "rinnovo" ? "" : $("fonte").value,
     consenso_albo: scelta("albo"), consenso_immagini: scelta("immagini"), consenso_newsletter: scelta("newsletter"),
     sito: $("sito").value
   };
 }
 
 function mostraEsito(numero, dati) {
-  const causale = `Quota ${CONFIG.annoSociale} tessera ${numero} ${dati.nome} ${dati.cognome}`;
+  const rinnovo = dati.tipo === "rinnovo";
+  const rif = numero ? `tessera ${numero}` : "rinnovo";
+  const causale = `Quota ${CONFIG.annoSociale} ${rif} ${dati.nome} ${dati.cognome}`;
   const blocchi = [];
   blocchi.push(`<div class="pagamento"><div class="titolo">Bonifico</div>
     IBAN <code>${CONFIG.iban}</code><br>intestato a ${CONFIG.intestatario}<br>causale <code>${esc(causale)}</code></div>`);
-  if (CONFIG.satispay) blocchi.push(`<div class="pagamento"><div class="titolo">Satispay</div><a href="${CONFIG.satispay}" target="_blank" rel="noopener">Paga con Satispay</a>, indicando nel messaggio il numero ${numero}.</div>`);
-  if (CONFIG.paypal) blocchi.push(`<div class="pagamento"><div class="titolo">PayPal o carta</div><a href="${CONFIG.paypal}" target="_blank" rel="noopener">Paga online</a>, indicando nella nota il numero ${numero}.</div>`);
+  if (CONFIG.satispay) blocchi.push(`<div class="pagamento"><div class="titolo">Satispay</div><a href="${CONFIG.satispay}" target="_blank" rel="noopener">Paga con Satispay</a>, indicando nel messaggio ${esc(rif)} e il tuo nome.</div>`);
+  if (CONFIG.paypal) blocchi.push(`<div class="pagamento"><div class="titolo">PayPal o carta</div><a href="${CONFIG.paypal}" target="_blank" rel="noopener">Paga online</a>, indicando nella nota ${esc(rif)} e il tuo nome.</div>`);
   blocchi.push(`<div class="pagamento"><div class="titolo">Di persona</div>In contanti o con carta alla prossima cena o al prossimo incontro dell'associazione.</div>`);
   $("pagamenti").innerHTML = blocchi.join("");
+  $("esito-titolo").textContent = rinnovo ? "Bentornato" : "Benvenuto";
+  $("esito-intro").textContent = rinnovo ? (numero ? "La tua tessera resta la numero" : "La tua tessera resta quella di sempre") : "La tua tessera porta il numero";
+  $("esito-numero").classList.toggle("nascosto", !numero);
+  $("esito-nota").textContent = rinnovo ? "Ti abbiamo mandato una mail di conferma. Il rinnovo è completo quando riceviamo la quota di" : "Ti abbiamo mandato una mail di conferma. Il numero diventa definitivo quando riceviamo la quota di";
   $("esito-numero").textContent = numero;
   $("esito-importo").textContent = euro(dati.importo);
   $("sezione-modulo").classList.add("nascosto");
@@ -459,7 +507,7 @@ $("modulo").addEventListener("submit", async e => {
   try {
     let numero;
     if (!CONFIG.scriptUrl) {
-      numero = "026"; // anteprima, nessun dato viene inviato
+      numero = dati.tipo === "rinnovo" ? (dati.tessera ? dati.tessera.padStart(3, "0") : "") : "026"; // anteprima, nessun dato viene inviato
     } else {
       const r = await fetch(CONFIG.scriptUrl, { method: "POST", headers: { "Content-Type": "text/plain;charset=utf-8" }, body: JSON.stringify(dati) });
       const j = await r.json();
