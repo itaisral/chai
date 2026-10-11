@@ -13,7 +13,10 @@
   body { margin:0; background:var(--fondo); color:var(--testo); font-family:"Titillium Web",system-ui,sans-serif; font-weight:300; font-size:16px; line-height:1.65; }
   .pagina { max-width:720px; margin:0 auto; padding:32px 16px 64px; }
   header { text-align:center; margin-bottom:32px; }
-  header img { width:96px; height:auto; display:block; margin:0 auto 12px; }
+  .intestazione { display:block; width:100%; max-width:560px; height:auto; margin:0 auto; }
+  .testata-mobile { display:none; }
+  @media (max-width:560px) { .intestazione { display:none; } .testata-mobile { display:block; } }
+  header .testata-mobile img { width:96px; height:auto; display:block; margin:0 auto 12px; }
   .nome { font-size:14px; letter-spacing:.14em; text-transform:uppercase; color:var(--blu); font-weight:400; }
   h1 { font-weight:300; font-size:30px; line-height:1.2; color:var(--blu); text-align:center; margin:0 0 8px; }
   .sotto { text-align:center; color:var(--grigio); font-size:14px; margin-bottom:36px; }
@@ -30,8 +33,11 @@
 <div class="pagina">
 
   <header>
-    <img src="logo.svg" alt="" onerror="this.style.display='none'">
-    <div class="nome">Associazione Italia Israele • Alessandria</div>
+    <img class="intestazione" src="intestazione.svg" alt="Associazione Italia Israele • Alessandria">
+    <div class="testata-mobile">
+      <img src="logo.svg" alt="" onerror="this.style.display='none'">
+      <div class="nome">Associazione Italia Israele • Alessandria</div>
+    </div>
   </header>
 
   <h1>Informativa sul trattamento dei dati personali</h1>

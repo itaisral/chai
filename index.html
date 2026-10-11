@@ -33,23 +33,26 @@
     font-size: 17px;
     line-height: 1.6;
   }
-  .pagina { max-width: 720px; margin: 0 auto; padding: 32px 16px 64px; }
+  .pagina { max-width: 1024px; margin: 0 auto; padding: 32px 16px 64px; }
 
   header { text-align: center; margin-bottom: 36px; }
-  header img { width: 132px; height: auto; display: block; margin: 0 auto 14px; }
+  .intestazione { display: block; width: 100%; max-width: 760px; height: auto; margin: 0 auto; }
+  .testata-mobile { display: none; }
+  @media (max-width: 560px) { .intestazione { display: none; } .testata-mobile { display: block; } }
+  header .testata-mobile img { width: 132px; height: auto; display: block; margin: 0 auto 14px; }
   .nome { font-size: 15px; letter-spacing: .14em; text-transform: uppercase; color: var(--blu); font-weight: 400; }
   .ebraico { font-size: 18px; color: var(--blu-2); margin-top: 2px; direction: rtl; }
   .slogan { font-size: 13px; letter-spacing: .08em; color: var(--grigio); margin-top: 6px; }
 
   h1 { font-weight: 300; font-size: 34px; line-height: 1.2; color: var(--blu); margin: 0 0 14px; text-align: center; }
-  .intro { text-align: left; max-width: 560px; margin: 0 auto 36px; }
+  .intro { text-align: left; margin: 0 0 36px; }
   .chai { text-align: center; font-size: 64px; line-height: 1; color: var(--rosso); font-weight: 400; margin: 0 0 10px; }
 
   form { display: grid; gap: 28px; }
   fieldset { border: 0; padding: 0; margin: 0; }
   legend { font-weight: 400; font-size: 13px; letter-spacing: .12em; text-transform: uppercase; color: var(--blu); margin-bottom: 12px; padding: 0; }
 
-  .fasce { display: grid; gap: 10px; }
+  .fasce { display: grid; gap: 10px; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); align-items: start; }
   .fascia {
     display: grid; grid-template-columns: auto 1fr auto; gap: 14px; align-items: center;
     background: var(--carta); border: 1px solid var(--linea); border-radius: var(--raggio);
@@ -59,8 +62,18 @@
   .fascia input { accent-color: var(--blu); width: 18px; height: 18px; margin: 0; }
   .fascia:has(input:checked) { border-color: var(--blu); box-shadow: 0 0 0 1px var(--blu); }
   .fascia .titolo { font-weight: 400; color: var(--blu); }
-  .fascia .nota { font-size: 14px; color: var(--grigio); line-height: 1.4; }
+  .fascia .titolo { display: block; line-height: 1.25; }
+  .fascia .sotto { display: block; font-size: 14px; color: var(--grigio); line-height: 1.25; margin-top: 2px; }
+  .fascia .dettaglio { grid-column: 1 / -1; display: grid; grid-template-rows: 0fr; transition: grid-template-rows .25s ease; }
+  .fascia .dettaglio > span { overflow: hidden; font-size: 14px; line-height: 1.3; color: var(--testo); }
+  .fascia:has(input:checked) .dettaglio { grid-template-rows: 1fr; }
+  .fascia:has(input:checked) .dettaglio > span { padding-top: 10px; margin-top: 2px; border-top: 1px solid var(--linea); }
+  .fascia { row-gap: 0; }
   .fascia .prezzo { font-size: 22px; color: var(--blu); white-space: nowrap; }
+  .fascia.onoraria { background: var(--oro-chiaro); border-color: var(--oro); cursor: default; }
+  .fascia.onoraria:hover { border-color: var(--oro); }
+  .fascia.onoraria .stella { width: 18px; text-align: center; color: var(--oro); font-size: 16px; }
+  .fascia.onoraria .prezzo { font-size: 17px; }
 
   .riquadro { background: var(--carta); border: 1px solid var(--linea); border-radius: var(--raggio); padding: 18px 16px; display: grid; gap: 14px; }
   .riga { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
@@ -75,6 +88,7 @@
   .nascosto { display: none !important; }
 
   .spunte { display: grid; gap: 12px; }
+  @media (min-width: 900px) { .spunte { grid-template-columns: 1fr 1fr 1fr; } .spunte > .gruppo-nota, .spunte > .spunta { grid-column: 1 / -1; } }
   .spunta { display: grid; grid-template-columns: auto 1fr; gap: 10px; align-items: start; font-size: 15px; }
   .spunta input { accent-color: var(--blu); width: 18px; height: 18px; margin-top: 4px; }
   .spunta a { color: var(--blu-2); }
@@ -90,6 +104,7 @@
 
   .trappola { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
 
+  form > .riepilogo, form > button, form > .errore { max-width: 520px; width: 100%; justify-self: center; }
   .riepilogo { text-align: center; font-size: 15px; color: var(--grigio); }
   .riepilogo strong { color: var(--blu); font-weight: 600; font-size: 20px; }
   button {
@@ -112,16 +127,43 @@
 
   footer { margin-top: 48px; text-align: center; font-size: 13px; color: var(--grigio); }
   footer a { color: var(--grigio); }
+  @media (max-width: 560px) {
+    .nome { font-size: 3vw; letter-spacing: .05em; white-space: nowrap; }
+    .ebraico { font-size: 4vw; }
+    .slogan { font-size: 2.7vw; letter-spacing: .03em; white-space: nowrap; }
+    .testata-mobile img { width: 116px; margin-bottom: 10px; }
+    .testata-mobile .nome, .testata-mobile .ebraico, .testata-mobile .slogan { line-height: 1.3; }
+    .testata-mobile .ebraico { margin-top: 1px; }
+    .testata-mobile .slogan { margin-top: 3px; }
+    body { font-size: 15px; }
+    .chai { font-size: 50px; }
+    h1 { font-size: 28px; }
+    legend { font-size: 12px; }
+    .fascia { padding: 12px 14px; column-gap: 12px; }
+    .fascia .sotto, .fascia .dettaglio > span { font-size: 13px; }
+    .fascia .prezzo { font-size: 19px; }
+    label.campo { font-size: 13px; }
+    label.campo small { font-size: 12px; }
+    input[type=text], input[type=email], input[type=tel], input[type=date], input[type=number], select { font-size: 15px; }
+    .spunta, .consenso .frase, .scelte label { font-size: 14px; }
+    .riepilogo { font-size: 14px; }
+    .riepilogo strong { font-size: 18px; }
+    button { font-size: 16px; }
+    .numero { font-size: 52px; }
+  }
 </style>
 </head>
 <body>
 <div class="pagina">
 
   <header>
-    <img src="logo.svg" alt="Logo dell'Associazione Italia Israele di Alessandria" onerror="this.style.display='none'">
-    <div class="nome">Associazione Italia Israele • Alessandria</div>
-    <div class="ebraico" lang="he">עמותת איטליה־ישראל אלסנדריה</div>
-    <div class="slogan">Dialogo · Conoscenza · Collaborazione · Futuro</div>
+    <img class="intestazione" src="intestazione.svg" alt="Associazione Italia Israele • Alessandria · עמותת איטליה־ישראל אלסנדריה · Dialogo, Conoscenza, Collaborazione, Futuro">
+    <div class="testata-mobile">
+      <img src="logo.svg" alt="Logo dell'Associazione Italia Israele di Alessandria" onerror="this.style.display='none'">
+      <div class="nome">Associazione Italia Israele • Alessandria</div>
+      <div class="ebraico" lang="he">עמותת איטליה־ישראל אלסנדריה</div>
+      <div class="slogan">Dialogo · Conoscenza · Collaborazione · Futuro</div>
+    </div>
   </header>
 
   <section id="sezione-modulo">
@@ -266,27 +308,34 @@ const CONFIG = {
 /* ================================================== */
 
 const FASCE = [
-  { id: "giovani",     titolo: "Giovani",     nota: "Fino a 25 anni compiuti.", importo: 18 },
-  { id: "familiare",   titolo: "Familiare",   nota: "Per il secondo componente di un nucleo con già un socio.", importo: 36 },
-  { id: "ordinario",   titolo: "Ordinario",   nota: "Il triplo chai.", importo: 54 },
-  { id: "sostenitore", titolo: "Sostenitore", nota: "Dieci volte chai. 54 € di quota, il resto è una donazione.", importo: 180 },
-  { id: "benemerito",  titolo: "Benemerito",  nota: "Da 360 € in su, per chi vuole sostenerci di più.", importo: 360, libero: true }
+  { id: "giovani",     titolo: "Giovani",     chai: "un <em>chai</em>",            dettaglio: "Per chi non ha ancora compiuto 26 anni.", importo: 18 },
+  { id: "familiare",   titolo: "Familiare",   chai: "doppio <em>chai</em>",        dettaglio: "Per il secondo componente di un nucleo in cui c'è già un socio.", importo: 36 },
+  { id: "ordinario",   titolo: "Ordinario",   chai: "triplo <em>chai</em>",        dettaglio: "La quota associativa annuale.", importo: 54 },
+  { id: "sostenitore", titolo: "Sostenitore", chai: "dieci volte <em>chai</em>",   dettaglio: "54 € di quota associativa e 126 € di donazione all'associazione.", importo: 180 },
+  { id: "benemerito",  titolo: "Benemerito",  chai: "venti volte <em>chai</em>",   dettaglio: "Da 360 € in su, per chi vuole sostenerci di più. 54 € di quota, il resto è una donazione.", importo: 360, libero: true },
+  { id: "onorario",    titolo: "Onorario",    chai: "su nomina del direttivo",      onorario: true }
 ];
 const QUOTA_BASE = 54;
 
 const $ = id => document.getElementById(id);
 const euro = n => n.toLocaleString("it-IT") + " €";
 
-$("fasce").innerHTML = FASCE.map(f => `
+$("fasce").innerHTML = FASCE.map(f => f.onorario ? `
+  <div class="fascia onoraria" title="Per personalità e istituzioni, su nomina del direttivo">
+    <span class="stella" aria-hidden="true">✡</span>
+    <span><span class="titolo">${f.titolo}</span><span class="sotto">${f.chai}</span></span>
+    <span class="prezzo"><em>ad honorem</em></span>
+  </div>` : `
   <label class="fascia">
-    <input type="radio" name="fascia" value="${f.id}" ${f.id === "ordinario" ? "checked" : ""}>
-    <span><span class="titolo">${f.titolo}</span><br><span class="nota">${f.nota}</span></span>
+    <input type="radio" name="fascia" value="${f.id}" >
+    <span><span class="titolo">${f.titolo}</span><span class="sotto">${f.chai}</span></span>
     <span class="prezzo">${f.libero ? "da " : ""}${f.importo} €</span>
+    <span class="dettaglio"><span>${f.dettaglio}</span></span>
   </label>`).join("");
 
 function fasciaScelta() {
-  const v = document.querySelector('input[name=fascia]:checked').value;
-  return FASCE.find(f => f.id === v);
+  const c = document.querySelector('input[name=fascia]:checked');
+  return c ? FASCE.find(f => f.id === c.value) : null;
 }
 function importoDovuto() {
   const f = fasciaScelta();
@@ -295,6 +344,11 @@ function importoDovuto() {
 }
 function aggiorna() {
   const f = fasciaScelta();
+  if (!f) {
+    ["extra-benemerito", "extra-familiare", "campo-nascita", "campo-cf"].forEach(id => $(id).classList.add("nascosto"));
+    $("riepilogo").innerHTML = "";
+    return;
+  }
   $("extra-benemerito").classList.toggle("nascosto", f.id !== "benemerito");
   $("extra-familiare").classList.toggle("nascosto", f.id !== "familiare");
   $("campo-nascita").classList.toggle("nascosto", f.id !== "giovani");
@@ -321,6 +375,7 @@ const CF_RE = /^[A-Z]{6}[0-9LMNPQRSTUV]{2}[ABCDEHLMPRST][0-9LMNPQRSTUV]{2}[A-Z][
 
 function valida() {
   const f = fasciaScelta();
+  if (!f) { $("fasce").scrollIntoView({ behavior: "smooth", block: "center" }); return "Scegli la tua quota."; }
   const obblig = ["nome", "cognome", "email", "cellulare", "indirizzo", "cap", "comune"];
   for (const id of obblig) if (!$(id).value.trim()) { $(id).focus(); return "Mancano alcuni dati obbligatori."; }
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test($("email").value.trim())) { $("email").focus(); return "L'indirizzo email non sembra corretto."; }
