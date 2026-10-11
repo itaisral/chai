@@ -52,6 +52,7 @@
   fieldset { border: 0; padding: 0; margin: 0; }
   legend { font-weight: 400; font-size: 13px; letter-spacing: .12em; text-transform: uppercase; color: var(--blu); margin-bottom: 12px; padding: 0; }
 
+  .validita { margin: -6px 0 12px; font-size: 14px; color: var(--grigio); }
   .fasce { display: grid; gap: 10px; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); align-items: start; }
   .fascia {
     display: grid; grid-template-columns: auto 1fr auto; gap: 14px; align-items: center;
@@ -86,6 +87,8 @@
   }
   input:focus, select:focus { outline: 2px solid var(--blu-2); outline-offset: 1px; border-color: transparent; }
   .nascosto { display: none !important; }
+  .riquadro-genitore { display: grid; gap: 10px; background: var(--oro-chiaro); border-radius: 8px; padding: 12px 14px; font-size: 14px; line-height: 1.4; }
+  .riquadro-genitore p { margin: 0; }
 
   .spunte { display: grid; gap: 12px; }
   @media (min-width: 900px) { .spunte { grid-template-columns: 1fr 1fr 1fr; } .spunte > .gruppo-nota, .spunte > .spunta { grid-column: 1 / -1; } }
@@ -178,6 +181,7 @@
 
       <fieldset>
         <legend>Scegli la tua quota</legend>
+        <p class="validita">La tessera 2027 vale da oggi al 31 dicembre 2027.</p>
         <div class="fasce" id="fasce"></div>
         <div class="riquadro nascosto" id="extra-benemerito" style="margin-top:10px">
           <label class="campo">Importo che desideri versare
@@ -213,6 +217,14 @@
             <input type="date" name="nascita" id="nascita">
             <small>Serve solo per verificare la fascia giovani.</small>
           </label>
+          <div class="riquadro-genitore nascosto" id="blocco-genitore">
+            <p>Per chi non ha ancora 18 anni la domanda va compilata da un genitore o da chi ne esercita la responsabilità. In questo caso email e cellulare sono quelli del genitore.</p>
+            <label class="campo">Nome e cognome del genitore
+              <input type="text" name="genitore" id="genitore" autocomplete="name">
+            </label>
+            <label class="spunta"><input type="checkbox" id="dich-genitore">
+              <span>Sono il genitore o chi esercita la responsabilità genitoriale e presento la domanda per conto del minore.</span></label>
+          </div>
           <label class="campo nascosto" id="campo-cf">Codice fiscale
             <input type="text" name="cf" id="cf" maxlength="16" autocomplete="off" style="text-transform:uppercase">
             <small>Serve per intestarti la ricevuta della donazione.</small>
@@ -241,7 +253,7 @@
           <label class="spunta"><input type="checkbox" id="statuto" required>
             <span>Chiedo di aderire all'associazione, ne condivido le finalità e mi impegno a rispettarne lo <a href="statuto.pdf" target="_blank" rel="noopener">statuto</a>. <span class="obbl">*</span></span></label>
           <label class="spunta"><input type="checkbox" id="privacy" required>
-            <span>Ho letto l'<a href="privacy.html" target="_blank" rel="noopener">informativa sulla privacy</a> e acconsento al trattamento dei miei dati per la gestione dell'iscrizione. <span class="obbl">*</span></span></label>
+            <span>Ho letto l'<a href="privacy.html" target="_blank" rel="noopener">informativa sulla privacy</a>. <span class="obbl">*</span></span></label>
           <div class="gruppo-nota" style="margin-top:12px">Facoltative</div>
           <div class="consenso">
             <div class="frase">Pubblicazione del mio nome nell'albo dei soci del rilancio, se rientro tra i primi cento.</div>
@@ -310,6 +322,7 @@ const QUOTA_BASE = 54;
 
 const $ = id => document.getElementById(id);
 const euro = n => n.toLocaleString("it-IT") + " €";
+const esc = t => String(t).replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
 
 $("fasce").innerHTML = FASCE.map(f => f.onorario ? `
   <div class="fascia onoraria" title="Per personalità e istituzioni, su nomina del direttivo">
@@ -336,13 +349,14 @@ function importoDovuto() {
 function aggiorna() {
   const f = fasciaScelta();
   if (!f) {
-    ["extra-benemerito", "extra-familiare", "campo-nascita", "campo-cf"].forEach(id => $(id).classList.add("nascosto"));
+    ["extra-benemerito", "extra-familiare", "campo-nascita", "campo-cf", "blocco-genitore"].forEach(id => $(id).classList.add("nascosto"));
     $("riepilogo").innerHTML = "";
     return;
   }
   $("extra-benemerito").classList.toggle("nascosto", f.id !== "benemerito");
   $("extra-familiare").classList.toggle("nascosto", f.id !== "familiare");
   $("campo-nascita").classList.toggle("nascosto", f.id !== "giovani");
+  $("blocco-genitore").classList.toggle("nascosto", !minore());
   $("campo-cf").classList.toggle("nascosto", !(f.id === "sostenitore" || f.id === "benemerito"));
   const tot = importoDovuto();
   let testo = `Quota ${f.titolo.toLowerCase()} <strong>${euro(tot)}</strong>`;
@@ -362,6 +376,11 @@ function eta(data) {
   if (m < 0 || (m === 0 && oggi.getDate() < n.getDate())) e--;
   return e;
 }
+function minore() {
+  const f = fasciaScelta();
+  return !!(f && f.id === "giovani" && $("nascita").value && eta($("nascita").value) < 18);
+}
+$("nascita").addEventListener("input", aggiorna);
 const CF_RE = /^[A-Z]{6}[0-9LMNPQRSTUV]{2}[ABCDEHLMPRST][0-9LMNPQRSTUV]{2}[A-Z][0-9LMNPQRSTUV]{3}[A-Z]$/;
 
 function valida() {
@@ -374,6 +393,10 @@ function valida() {
   if (f.id === "giovani") {
     if (!$("nascita").value) { $("nascita").focus(); return "Per la fascia giovani serve la data di nascita."; }
     if (eta($("nascita").value) >= 26) { $("nascita").focus(); return "La fascia giovani è riservata a chi non ha ancora compiuto 26 anni."; }
+    if (minore()) {
+      if (!$("genitore").value.trim()) { $("genitore").focus(); return "Per un minore serve il nome del genitore."; }
+      if (!$("dich-genitore").checked) return "Per un minore serve la dichiarazione del genitore.";
+    }
   }
   if (f.id === "familiare" && !$("familiare").value.trim()) { $("familiare").focus(); return "Indica il familiare già socio."; }
   if (f.id === "sostenitore" || f.id === "benemerito") {
@@ -401,6 +424,8 @@ function datiModulo() {
     nascita: f.id === "giovani" ? $("nascita").value : "",
     cf: (f.id === "sostenitore" || f.id === "benemerito") ? $("cf").value.trim().toUpperCase() : "",
     familiare: f.id === "familiare" ? $("familiare").value.trim() : "",
+    genitore: minore() ? $("genitore").value.trim() : "",
+    dichiarazione_genitore: minore() ? $("dich-genitore").checked : false,
     fonte: $("fonte").value,
     consenso_albo: scelta("albo"), consenso_immagini: scelta("immagini"), consenso_newsletter: scelta("newsletter"),
     sito: $("sito").value
@@ -411,7 +436,7 @@ function mostraEsito(numero, dati) {
   const causale = `Quota ${CONFIG.annoSociale} tessera ${numero} ${dati.nome} ${dati.cognome}`;
   const blocchi = [];
   blocchi.push(`<div class="pagamento"><div class="titolo">Bonifico</div>
-    IBAN <code>${CONFIG.iban}</code><br>intestato a ${CONFIG.intestatario}<br>causale <code>${causale}</code></div>`);
+    IBAN <code>${CONFIG.iban}</code><br>intestato a ${CONFIG.intestatario}<br>causale <code>${esc(causale)}</code></div>`);
   if (CONFIG.satispay) blocchi.push(`<div class="pagamento"><div class="titolo">Satispay</div><a href="${CONFIG.satispay}" target="_blank" rel="noopener">Paga con Satispay</a>, indicando nel messaggio il numero ${numero}.</div>`);
   if (CONFIG.paypal) blocchi.push(`<div class="pagamento"><div class="titolo">PayPal o carta</div><a href="${CONFIG.paypal}" target="_blank" rel="noopener">Paga online</a>, indicando nella nota il numero ${numero}.</div>`);
   blocchi.push(`<div class="pagamento"><div class="titolo">Di persona</div>In contanti o con carta alla prossima cena o al prossimo incontro dell'associazione.</div>`);
