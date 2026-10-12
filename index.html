@@ -636,7 +636,8 @@ $("modulo").addEventListener("submit", async e => {
   } catch (x) {
     $("errore").textContent = /Verifica/.test(x.message)
       ? "La verifica di sicurezza non è andata a buon fine. Riprova."
-      : "Non siamo riusciti a registrare la domanda. Riprova tra poco o scrivici a italia.israele.al@gmail.com.";
+      : "Non siamo riusciti a registrare la domanda. Riprova tra poco o scrivici a italia.israele.al@gmail.com." +
+        " (" + (x.message || "errore sconosciuto") + ")";
     if (turnstileId !== null) turnstile.reset(turnstileId);
     btn.disabled = false; btn.textContent = "Invia la domanda di adesione";
   }
