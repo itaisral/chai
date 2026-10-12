@@ -57,9 +57,10 @@
     border: 1px solid var(--linea); border-radius: var(--raggio); padding: 18px 10px 16px; cursor: pointer; font: inherit; letter-spacing: 0; }
   .tipo-scelta:hover { background: var(--carta); border-color: var(--oro); }
   .tipo-scelta[aria-pressed=true] { border-color: var(--blu); box-shadow: 0 0 0 1px var(--blu); background: var(--carta); }
-  .tipo-he { font-family: "Frank Ruhl Libre", serif; font-size: 34px; line-height: 1.1; color: var(--blu); }
-  .tipo-tr { font-size: 15px; color: var(--grigio); line-height: 1.2; }
-  .tipo-it { margin-top: 6px; font-size: 12px; font-weight: 400; letter-spacing: .12em; text-transform: uppercase; color: var(--blu-2); }
+  .tipo-scelta:focus:not(:focus-visible) { outline: none; }
+  .tipo-he { font-family: "Frank Ruhl Libre", serif; font-size: 30px; line-height: 1.15; color: var(--blu); }
+  .tipo-tr { font-size: 14px; color: var(--grigio); line-height: 1.2; }
+  .tipo-it { margin-top: 4px; font-size: 30px; font-weight: 300; line-height: 1.15; color: var(--blu); }
   #tessera { max-width: 120px; }
   .validita { margin: -6px 0 12px; font-size: 14px; color: var(--grigio); }
   .fasce { display: grid; gap: 10px; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); align-items: start; }
@@ -80,9 +81,9 @@
   .fascia:has(input:checked) .dettaglio > span { padding-top: 10px; margin-top: 2px; border-top: 1px solid var(--linea); }
   .fascia { row-gap: 0; }
   .fascia .prezzo { font-size: 22px; color: var(--blu); white-space: nowrap; }
-  .fascia.onoraria { background: #2a62d4; border-color: #0038b8; box-shadow: 0 0 0 1px #0038b8; cursor: default; }
+  .fascia.onoraria { background: #4567a8; border-color: #24448f; box-shadow: 0 0 0 1px #24448f; cursor: default; }
   .fascia.onoraria .sotto { white-space: nowrap; }
-  .fascia.onoraria:hover { border-color: #0038b8; }
+  .fascia.onoraria:hover { border-color: #24448f; }
   .fascia.onoraria .stella { width: 18px; text-align: center; color: #fff; font-size: 18px; }
   .fascia.onoraria .titolo, .fascia.onoraria .sotto, .fascia.onoraria .prezzo { color: #fff; }
   .fascia.onoraria .prezzo { font-size: 17px; }
@@ -163,9 +164,8 @@
     .ebraico { font-size: 4vw; }
     .slogan { font-size: 2.7vw; letter-spacing: .03em; white-space: nowrap; }
     body { font-size: 15px; }
-    .tipo-he { font-size: 28px; }
-    .tipo-tr { font-size: 13px; }
-    .tipo-it { font-size: 11px; }
+    .tipo-he, .tipo-it { font-size: 21px; white-space: nowrap; }
+    .tipo-tr { font-size: 12px; }
     .chai { font-size: 56px; }
     h1 { font-size: 28px; }
     legend { font-size: 12px; }
