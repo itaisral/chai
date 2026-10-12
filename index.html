@@ -91,12 +91,14 @@
   .riquadro { background: var(--carta); border: 1px solid var(--linea); border-radius: var(--raggio); padding: 18px 16px; display: grid; gap: 14px; }
   .riga { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
   .riga-via { grid-template-columns: 1fr 120px; }
-  .riga-cap { grid-template-columns: 140px 1fr 110px; }
-  .telefono { display: grid; grid-template-columns: 84px 1fr; gap: 6px; }
+  .riga-cap { grid-template-columns: 140px 1fr 220px; }
+  .telefono { display: grid; grid-template-columns: 150px 1fr; gap: 6px; }
   @media (max-width: 560px) {
     .riga { grid-template-columns: 1fr; }
     .riga-via { grid-template-columns: 1fr 90px; }
-    .riga-cap { grid-template-columns: 1fr 90px; }
+    .riga-cap { grid-template-columns: 1fr 1fr; }
+    .spaziatore { display: none; }
+    .telefono { grid-template-columns: 120px 1fr; }
     .riga-cap > .campo-citta { grid-column: 1 / -1; order: -1; }
   }
   label.campo, .campo-gruppo { display: grid; gap: 4px; align-content: start; font-size: 14px; font-weight: 400; color: var(--blu); }
@@ -105,6 +107,7 @@
     font: inherit; font-weight: 300; color: var(--testo); width: 100%;
     padding: 10px 12px; border: 1px solid var(--linea); border-radius: 8px; background: #fff;
   }
+  input[type=text], input[type=email], input[type=tel], input[type=date], input[type=number], select { min-height: 44px; }
   input:focus, select:focus { outline: 2px solid var(--blu-2); outline-offset: 1px; border-color: transparent; }
   .nascosto { display: none !important; }
   .riquadro-genitore { display: grid; gap: 10px; background: var(--oro-chiaro); border-radius: 8px; padding: 12px 14px; font-size: 14px; line-height: 1.4; }
@@ -259,38 +262,28 @@
             <div class="campo-gruppo">
               <label class="campo" for="cellulare">Cellulare</label>
               <div class="telefono">
-                <input type="tel" name="prefisso" id="prefisso" value="+39" list="prefissi" autocomplete="tel-country-code" aria-label="Prefisso internazionale" maxlength="5">
+                <select name="prefisso" id="prefisso" aria-label="Prefisso internazionale" autocomplete="tel-country-code"></select>
                 <input type="tel" name="cellulare" id="cellulare" autocomplete="tel-national" inputmode="numeric" maxlength="16" required>
               </div>
             </div>
           </div>
+          <div class="riga">
+            <label class="campo">Paese di residenza <select name="paese" id="paese" autocomplete="country-name" required></select></label>
+            <div class="spaziatore"></div>
+          </div>
           <div class="riga riga-via">
-            <label class="campo">Via o piazza <input type="text" name="via" id="via" autocomplete="address-line1" required></label>
+            <label class="campo">Indirizzo <input type="text" name="via" id="via" autocomplete="address-line1" required></label>
             <label class="campo">Civico <input type="text" name="civico" id="civico" autocomplete="address-line2" maxlength="10"></label>
           </div>
           <div class="riga riga-cap">
-            <label class="campo"><span id="etichetta-cap">CAP</span> <input type="text" name="cap" id="cap" autocomplete="postal-code" inputmode="numeric" maxlength="5" required></label>
+            <label class="campo"><span id="etichetta-cap">CAP</span> <input type="text" name="cap" id="cap" autocomplete="postal-code" inputmode="numeric" maxlength="5"></label>
             <label class="campo campo-citta">Città <input type="text" name="citta" id="citta" autocomplete="address-level2" required></label>
-            <label class="campo" id="campo-provincia">Provincia <input type="text" name="provincia" id="provincia" autocomplete="address-level1" maxlength="2" placeholder="AL" style="text-transform:uppercase"></label>
-          </div>
-          <div class="riga">
-            <label class="campo">Paese <input type="text" name="paese" id="paese" value="Italia" list="paesi" autocomplete="country-name" required></label>
-            <label class="campo" id="campo-anno"><span>Anno di nascita <small>(facoltativo)</small></span>
-              <input type="text" name="anno_nascita" id="anno_nascita" inputmode="numeric" maxlength="4" autocomplete="bday-year">
-              <small>Ci aiuta a conoscere l'età dei soci. Lo usiamo solo nei conteggi complessivi.</small>
+            <label class="campo" id="campo-provincia"><span id="etichetta-provincia">Provincia</span>
+              <select name="provincia" id="provincia" autocomplete="address-level1"></select>
+              <select name="stato_usa" id="stato-usa" class="nascosto" autocomplete="address-level1"></select>
+              <input type="text" name="regione" id="regione" class="nascosto" maxlength="60" autocomplete="address-level1">
             </label>
           </div>
-          <datalist id="prefissi">
-            <option value="+39">Italia</option><option value="+972">Israele</option><option value="+41">Svizzera</option>
-            <option value="+33">Francia</option><option value="+49">Germania</option><option value="+44">Regno Unito</option>
-            <option value="+34">Spagna</option><option value="+43">Austria</option><option value="+32">Belgio</option>
-            <option value="+31">Paesi Bassi</option><option value="+1">Stati Uniti e Canada</option>
-          </datalist>
-          <datalist id="paesi">
-            <option>Italia</option><option>Israele</option><option>Svizzera</option><option>Francia</option><option>Germania</option>
-            <option>Regno Unito</option><option>Spagna</option><option>Austria</option><option>Belgio</option><option>Paesi Bassi</option>
-            <option>Stati Uniti</option><option>Canada</option><option>Argentina</option><option>San Marino</option>
-          </datalist>
           <label class="campo nascosto" id="campo-nascita">Data di nascita
             <input type="date" name="nascita" id="nascita">
             <small>Serve solo per verificare la fascia giovani.</small>
@@ -307,6 +300,11 @@
             <input type="text" name="cf" id="cf" maxlength="16" autocomplete="off" style="text-transform:uppercase">
             <small>Serve per intestarti la ricevuta della donazione.</small>
           </label>
+          <div class="riga">
+          <label class="campo" id="campo-anno"><span>Anno di nascita <small>(facoltativo)</small></span>
+            <input type="text" name="anno_nascita" id="anno_nascita" inputmode="numeric" maxlength="4" autocomplete="bday-year">
+            <small>Ci aiuta a conoscere l'età dei soci. Lo usiamo solo nei conteggi complessivi.</small>
+          </label>
           <label class="campo" id="campo-fonte">Come ci hai conosciuto?
             <select name="fonte" id="fonte">
               <option value="">Scegli…</option>
@@ -318,6 +316,7 @@
               <option>Altro</option>
             </select>
           </label>
+          </div>
           <div class="trappola" aria-hidden="true">
             <label>Lascia vuoto <input type="text" name="sito" id="sito" tabindex="-1" autocomplete="off"></label>
           </div>
@@ -402,6 +401,10 @@ const FASCE = [
 ];
 const QUOTA_BASE = 54;
 
+const PAESI = [["IT","Italia","+39"],["IL","Israele","+972"],["AF","Afghanistan","+93"],["AL","Albania","+355"],["DZ","Algeria","+213"],["AD","Andorra","+376"],["AO","Angola","+244"],["AI","Anguilla","+1"],["AG","Antigua e Barbuda","+1"],["SA","Arabia Saudita","+966"],["AR","Argentina","+54"],["AM","Armenia","+374"],["AW","Aruba","+297"],["AU","Australia","+61"],["AT","Austria","+43"],["AZ","Azerbaigian","+994"],["BS","Bahamas","+1"],["BH","Bahrein","+973"],["BD","Bangladesh","+880"],["BB","Barbados","+1"],["BE","Belgio","+32"],["BZ","Belize","+501"],["BJ","Benin","+229"],["BM","Bermuda","+1"],["BT","Bhutan","+975"],["BY","Bielorussia","+375"],["BO","Bolivia","+591"],["BA","Bosnia-Erzegovina","+387"],["BW","Botswana","+267"],["BR","Brasile","+55"],["BN","Brunei","+673"],["BG","Bulgaria","+359"],["BF","Burkina Faso","+226"],["BI","Burundi","+257"],["KH","Cambogia","+855"],["CM","Camerun","+237"],["CA","Canada","+1"],["CV","Capo Verde","+238"],["TD","Ciad","+235"],["CL","Cile","+56"],["CN","Cina","+86"],["CY","Cipro","+357"],["VA","Città del Vaticano","+39"],["CO","Colombia","+57"],["KM","Comore","+269"],["CG","Congo","+242"],["CD","Congo (Repubblica democratica)","+243"],["KP","Corea del Nord","+850"],["KR","Corea del Sud","+82"],["CI","Costa d'Avorio","+225"],["CR","Costa Rica","+506"],["HR","Croazia","+385"],["CU","Cuba","+53"],["CW","Curaçao","+599"],["DK","Danimarca","+45"],["DM","Dominica","+1"],["EC","Ecuador","+593"],["EG","Egitto","+20"],["SV","El Salvador","+503"],["AE","Emirati Arabi Uniti","+971"],["ER","Eritrea","+291"],["EE","Estonia","+372"],["SZ","Eswatini","+268"],["ET","Etiopia","+251"],["FJ","Figi","+679"],["PH","Filippine","+63"],["FI","Finlandia","+358"],["FR","Francia","+33"],["GA","Gabon","+241"],["GM","Gambia","+220"],["GE","Georgia","+995"],["DE","Germania","+49"],["GH","Ghana","+233"],["JM","Giamaica","+1"],["JP","Giappone","+81"],["GI","Gibilterra","+350"],["DJ","Gibuti","+253"],["JO","Giordania","+962"],["GR","Grecia","+30"],["GD","Grenada","+1"],["GL","Groenlandia","+299"],["GP","Guadalupa","+590"],["GU","Guam","+1"],["GT","Guatemala","+502"],["GG","Guernsey","+44"],["GN","Guinea","+224"],["GQ","Guinea equatoriale","+240"],["GW","Guinea-Bissau","+245"],["GY","Guyana","+592"],["GF","Guyana francese","+594"],["HT","Haiti","+509"],["HN","Honduras","+504"],["HK","Hong Kong","+852"],["IN","India","+91"],["ID","Indonesia","+62"],["IR","Iran","+98"],["IQ","Iraq","+964"],["IE","Irlanda","+353"],["IS","Islanda","+354"],["IM","Isola di Man","+44"],["CX","Isola di Natale","+61"],["NF","Isola Norfolk","+672"],["AX","Isole Åland","+358"],["KY","Isole Cayman","+1"],["CC","Isole Cocos","+61"],["CK","Isole Cook","+682"],["FK","Isole Falkland","+500"],["FO","Isole Fær Øer","+298"],["MP","Isole Marianne Settentrionali","+1"],["MH","Isole Marshall","+692"],["SB","Isole Salomone","+677"],["TC","Isole Turks e Caicos","+1"],["VI","Isole Vergini americane","+1"],["VG","Isole Vergini britanniche","+1"],["JE","Jersey","+44"],["KZ","Kazakistan","+7"],["KE","Kenya","+254"],["KG","Kirghizistan","+996"],["KI","Kiribati","+686"],["KW","Kuwait","+965"],["LA","Laos","+856"],["LS","Lesotho","+266"],["LV","Lettonia","+371"],["LB","Libano","+961"],["LR","Liberia","+231"],["LY","Libia","+218"],["LI","Liechtenstein","+423"],["LT","Lituania","+370"],["LU","Lussemburgo","+352"],["MO","Macao","+853"],["MK","Macedonia del Nord","+389"],["MG","Madagascar","+261"],["MW","Malawi","+265"],["MY","Malaysia","+60"],["MV","Maldive","+960"],["ML","Mali","+223"],["MT","Malta","+356"],["MA","Marocco","+212"],["MQ","Martinica","+596"],["MR","Mauritania","+222"],["MU","Maurizio","+230"],["YT","Mayotte","+262"],["MX","Messico","+52"],["FM","Micronesia","+691"],["MD","Moldavia","+373"],["MC","Monaco","+377"],["MN","Mongolia","+976"],["ME","Montenegro","+382"],["MS","Montserrat","+1"],["MZ","Mozambico","+258"],["MM","Myanmar","+95"],["NA","Namibia","+264"],["NR","Nauru","+674"],["NP","Nepal","+977"],["NI","Nicaragua","+505"],["NE","Niger","+227"],["NG","Nigeria","+234"],["NU","Niue","+683"],["NO","Norvegia","+47"],["NC","Nuova Caledonia","+687"],["NZ","Nuova Zelanda","+64"],["OM","Oman","+968"],["NL","Paesi Bassi","+31"],["BQ","Paesi Bassi caraibici","+599"],["PK","Pakistan","+92"],["PW","Palau","+680"],["PS","Palestina","+970"],["PA","Panama","+507"],["PG","Papua Nuova Guinea","+675"],["PY","Paraguay","+595"],["PE","Perù","+51"],["PF","Polinesia francese","+689"],["PL","Polonia","+48"],["PT","Portogallo","+351"],["PR","Portorico","+1"],["QA","Qatar","+974"],["GB","Regno Unito","+44"],["CZ","Repubblica Ceca","+420"],["CF","Repubblica Centrafricana","+236"],["DO","Repubblica Dominicana","+1"],["RE","Riunione","+262"],["RO","Romania","+40"],["RW","Ruanda","+250"],["RU","Russia","+7"],["EH","Sahara occidentale","+212"],["KN","Saint Kitts e Nevis","+1"],["LC","Saint Lucia","+1"],["VC","Saint Vincent e Grenadine","+1"],["BL","Saint-Barthélemy","+590"],["MF","Saint-Martin","+590"],["PM","Saint-Pierre e Miquelon","+508"],["WS","Samoa","+685"],["AS","Samoa americane","+1"],["SM","San Marino","+378"],["SH","Sant'Elena","+290"],["ST","São Tomé e Príncipe","+239"],["SN","Senegal","+221"],["RS","Serbia","+381"],["SC","Seychelles","+248"],["SL","Sierra Leone","+232"],["SG","Singapore","+65"],["SX","Sint Maarten","+1"],["SY","Siria","+963"],["SK","Slovacchia","+421"],["SI","Slovenia","+386"],["SO","Somalia","+252"],["ES","Spagna","+34"],["LK","Sri Lanka","+94"],["US","Stati Uniti","+1"],["ZA","Sudafrica","+27"],["SD","Sudan","+249"],["SS","Sudan del sud","+211"],["SR","Suriname","+597"],["SJ","Svalbard e Jan Mayen","+47"],["SE","Svezia","+46"],["CH","Svizzera","+41"],["TJ","Tagikistan","+992"],["TW","Taiwan","+886"],["TZ","Tanzania","+255"],["IO","Territorio britannico dell'Oceano Indiano","+246"],["TH","Thailandia","+66"],["TL","Timor Est","+670"],["TG","Togo","+228"],["TK","Tokelau","+690"],["TO","Tonga","+676"],["TT","Trinidad e Tobago","+1"],["TN","Tunisia","+216"],["TR","Turchia","+90"],["TM","Turkmenistan","+993"],["TV","Tuvalu","+688"],["UA","Ucraina","+380"],["UG","Uganda","+256"],["HU","Ungheria","+36"],["UY","Uruguay","+598"],["UZ","Uzbekistan","+998"],["VU","Vanuatu","+678"],["VE","Venezuela","+58"],["VN","Vietnam","+84"],["WF","Wallis e Futuna","+681"],["YE","Yemen","+967"],["ZM","Zambia","+260"],["ZW","Zimbabwe","+263"]];
+const PROVINCE = [["AG","Agrigento"],["AL","Alessandria"],["AN","Ancona"],["AO","Aosta"],["AR","Arezzo"],["AP","Ascoli Piceno"],["AT","Asti"],["AV","Avellino"],["BA","Bari"],["BT","Barletta-Andria-Trani"],["BL","Belluno"],["BN","Benevento"],["BG","Bergamo"],["BI","Biella"],["BO","Bologna"],["BZ","Bolzano"],["BS","Brescia"],["BR","Brindisi"],["CA","Cagliari"],["CL","Caltanissetta"],["CB","Campobasso"],["CE","Caserta"],["CT","Catania"],["CZ","Catanzaro"],["CH","Chieti"],["CO","Como"],["CS","Cosenza"],["CR","Cremona"],["KR","Crotone"],["CN","Cuneo"],["EN","Enna"],["FM","Fermo"],["FE","Ferrara"],["FI","Firenze"],["FG","Foggia"],["FC","Forlì-Cesena"],["FR","Frosinone"],["OT","Gallura Nord-Est Sardegna"],["GE","Genova"],["GO","Gorizia"],["GR","Grosseto"],["IM","Imperia"],["IS","Isernia"],["AQ","L'Aquila"],["SP","La Spezia"],["LT","Latina"],["LE","Lecce"],["LC","Lecco"],["LI","Livorno"],["LO","Lodi"],["LU","Lucca"],["MC","Macerata"],["MN","Mantova"],["MS","Massa-Carrara"],["MT","Matera"],["VS","Medio Campidano"],["ME","Messina"],["MI","Milano"],["MO","Modena"],["MB","Monza e della Brianza"],["NA","Napoli"],["NO","Novara"],["NU","Nuoro"],["OG","Ogliastra"],["OR","Oristano"],["PD","Padova"],["PA","Palermo"],["PR","Parma"],["PV","Pavia"],["PG","Perugia"],["PU","Pesaro e Urbino"],["PE","Pescara"],["PC","Piacenza"],["PI","Pisa"],["PT","Pistoia"],["PN","Pordenone"],["PZ","Potenza"],["PO","Prato"],["RG","Ragusa"],["RA","Ravenna"],["RC","Reggio Calabria"],["RE","Reggio Emilia"],["RI","Rieti"],["RN","Rimini"],["RM","Roma"],["RO","Rovigo"],["SA","Salerno"],["SS","Sassari"],["SV","Savona"],["SI","Siena"],["SR","Siracusa"],["SO","Sondrio"],["SU","Sud Sardegna"],["CI","Sulcis Iglesiente"],["TA","Taranto"],["TE","Teramo"],["TR","Terni"],["TO","Torino"],["TP","Trapani"],["TN","Trento"],["TV","Treviso"],["TS","Trieste"],["UD","Udine"],["VA","Varese"],["VE","Venezia"],["VB","Verbano-Cusio-Ossola"],["VC","Vercelli"],["VR","Verona"],["VV","Vibo Valentia"],["VI","Vicenza"],["VT","Viterbo"]];
+const STATI_USA = [["AL","Alabama"],["AK","Alaska"],["AZ","Arizona"],["AR","Arkansas"],["CA","California"],["CO","Colorado"],["CT","Connecticut"],["DE","Delaware"],["DC","District of Columbia"],["FL","Florida"],["GA","Georgia"],["HI","Hawaii"],["ID","Idaho"],["IL","Illinois"],["IN","Indiana"],["IA","Iowa"],["KS","Kansas"],["KY","Kentucky"],["LA","Louisiana"],["ME","Maine"],["MD","Maryland"],["MA","Massachusetts"],["MI","Michigan"],["MN","Minnesota"],["MS","Mississippi"],["MO","Missouri"],["MT","Montana"],["NE","Nebraska"],["NV","Nevada"],["NH","New Hampshire"],["NJ","New Jersey"],["NM","New Mexico"],["NY","New York"],["NC","North Carolina"],["ND","North Dakota"],["OH","Ohio"],["OK","Oklahoma"],["OR","Oregon"],["PA","Pennsylvania"],["RI","Rhode Island"],["SC","South Carolina"],["SD","South Dakota"],["TN","Tennessee"],["TX","Texas"],["UT","Utah"],["VT","Vermont"],["VA","Virginia"],["WA","Washington"],["WV","West Virginia"],["WI","Wisconsin"],["WY","Wyoming"]];
+
 const $ = id => document.getElementById(id);
 const AVVIO = Date.now();
 const euro = n => n.toLocaleString("it-IT") + " €";
@@ -466,20 +469,44 @@ function minore() {
 }
 $("nascita").addEventListener("input", aggiorna);
 
-const inItalia = () => $("paese").value.trim().toLowerCase() === "italia";
-function aggiornaPaese() {
-  const it = inItalia();
-  $("campo-provincia").classList.toggle("nascosto", !it);
-  $("etichetta-cap").textContent = it ? "CAP" : "Codice postale";
-  $("cap").maxLength = it ? 5 : 10;
-  $("cap").inputMode = it ? "numeric" : "text";
-}
-$("paese").addEventListener("input", aggiornaPaese);
-aggiornaPaese();
-$("prefisso").addEventListener("blur", () => {
-  const v = $("prefisso").value.replace(/[^\d+]/g, "");
-  $("prefisso").value = v && !v.startsWith("+") ? "+" + v.replace(/^0+/, "") : v;
+const inItalia = () => $("paese").value === "Italia";
+const negliUSA = () => $("paese").value === "Stati Uniti";
+const opzione = (v, t) => { const o = document.createElement("option"); o.value = v; o.textContent = t; return o; };
+PAESI.forEach(([iso, nome, pref], i) => {
+  const o = opzione(pref, pref + " " + nome); o.dataset.iso = iso; $("prefisso").appendChild(o);
+  const q = opzione(nome, nome); q.dataset.iso = iso; $("paese").appendChild(q);
+  if (i === 1) {                       // dopo Italia e Israele, una riga di separazione
+    const sep = opzione("", "──────────"); sep.disabled = true;
+    $("prefisso").appendChild(sep); $("paese").appendChild(sep.cloneNode(true));
+  }
 });
+$("prefisso").selectedIndex = 0;
+$("paese").selectedIndex = 0;
+$("provincia").appendChild(opzione("", "Scegli…"));
+PROVINCE.forEach(([sigla, nome]) => $("provincia").appendChild(opzione(sigla, nome + " (" + sigla + ")")));
+$("stato-usa").appendChild(opzione("", "Scegli…"));
+STATI_USA.forEach(([sigla, nome]) => $("stato-usa").appendChild(opzione(sigla, nome + " (" + sigla + ")")));
+
+let prefissoToccato = false;
+$("prefisso").addEventListener("change", () => { prefissoToccato = true; });
+
+function aggiornaPaese() {
+  const it = inItalia(), usa = negliUSA();
+  $("provincia").classList.toggle("nascosto", !it);
+  $("stato-usa").classList.toggle("nascosto", !usa);
+  $("regione").classList.toggle("nascosto", it || usa);
+  $("etichetta-provincia").innerHTML = it ? "Provincia" : usa ? "Stato" : "Regione o Stato <small>(se c'è)</small>";
+  $("etichetta-cap").innerHTML = it ? "CAP" : usa ? "ZIP code" : "Codice postale <small>(se c'è)</small>";
+  $("cap").maxLength = it ? 5 : usa ? 10 : 12;
+  $("cap").inputMode = it || usa ? "numeric" : "text";
+  if (!prefissoToccato) {              // il prefisso segue il paese finché non lo si cambia a mano
+    const iso = $("paese").selectedOptions[0].dataset.iso;
+    const o = [...$("prefisso").options].find(x => x.dataset.iso === iso);
+    if (o) o.selected = true;
+  }
+}
+$("paese").addEventListener("change", aggiornaPaese);
+aggiornaPaese();
 
 /* Cloudflare Turnstile, solo se è stata inserita la chiave */
 let turnstileId = null;
@@ -521,7 +548,8 @@ function valida() {
   document.querySelectorAll(".errato").forEach(x => x.classList.remove("errato"));
   const f = fasciaScelta();
   if (!f) return sbaglio("Scegli la tua quota.", $("fasce"));
-  const obblig = ["nome", "cognome", "email", "prefisso", "cellulare", "via", "cap", "citta", "paese"];
+  const obblig = ["nome", "cognome", "email", "prefisso", "cellulare", "paese", "via", "citta"]
+    .concat(inItalia() ? ["cap", "provincia"] : negliUSA() ? ["cap", "stato-usa"] : []);
   const vuoti = obblig.map($).filter(x => !x.value.trim());
   if (vuoti.length) return sbaglio(vuoti.length === 1 ? "Manca un dato obbligatorio." : "Mancano alcuni dati obbligatori.", ...vuoti);
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test($("email").value.trim())) return sbaglio("L'indirizzo email non sembra corretto.", $("email"));
@@ -529,7 +557,7 @@ function valida() {
   if (!/^\+\d{1,4}$/.test($("prefisso").value.trim())) return sbaglio("Il prefisso deve essere nella forma +39.", $("prefisso"));
   if (!/^[\d\s]{5,16}$/.test($("cellulare").value.trim())) return sbaglio("Il numero di cellulare può contenere solo cifre.", $("cellulare"));
   if (inItalia() && !/^\d{5}$/.test($("cap").value.trim())) return sbaglio("Il CAP deve avere cinque cifre.", $("cap"));
-  if (inItalia() && !/^[A-Za-z]{2}$/.test($("provincia").value.trim())) return sbaglio("Indica la sigla della provincia, per esempio AL.", $("provincia"));
+  if (negliUSA() && !/^\d{5}(-\d{4})?$/.test($("cap").value.trim())) return sbaglio("Lo ZIP code deve avere cinque cifre.", $("cap"));
   const anno = $("anno_nascita").value.trim();
   if (f.id !== "giovani" && anno && !(/^\d{4}$/.test(anno) && anno >= 1900 && anno <= new Date().getFullYear())) return sbaglio("L'anno di nascita non sembra corretto.", $("anno_nascita"));
   if (f.id === "giovani") {
@@ -576,7 +604,8 @@ function datiModulo() {
     nome: $("nome").value.trim(), cognome: $("cognome").value.trim(),
     email: $("email").value.trim(), prefisso: $("prefisso").value.trim(), cellulare: $("cellulare").value.trim(),
     via: $("via").value.trim(), civico: $("civico").value.trim(), cap: $("cap").value.trim().toUpperCase(),
-    citta: $("citta").value.trim(), provincia: inItalia() ? $("provincia").value.trim().toUpperCase() : "",
+    citta: $("citta").value.trim(),
+    provincia: inItalia() ? $("provincia").value : negliUSA() ? $("stato-usa").value : $("regione").value.trim(),
     paese: $("paese").value.trim(),
     nascita: f.id === "giovani" ? $("nascita").value : "",
     anno_nascita: f.id === "giovani" ? "" : $("anno_nascita").value.trim(),
