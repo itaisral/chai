@@ -87,8 +87,16 @@
 
   .riquadro { background: var(--carta); border: 1px solid var(--linea); border-radius: var(--raggio); padding: 18px 16px; display: grid; gap: 14px; }
   .riga { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
-  @media (max-width: 560px) { .riga { grid-template-columns: 1fr; } }
-  label.campo { display: grid; gap: 4px; font-size: 14px; font-weight: 400; color: var(--blu); }
+  .riga-via { grid-template-columns: 1fr 120px; }
+  .riga-cap { grid-template-columns: 140px 1fr 110px; }
+  .telefono { display: grid; grid-template-columns: 84px 1fr; gap: 6px; }
+  @media (max-width: 560px) {
+    .riga { grid-template-columns: 1fr; }
+    .riga-via { grid-template-columns: 1fr 90px; }
+    .riga-cap { grid-template-columns: 1fr 90px; }
+    .riga-cap > .campo-citta { grid-column: 1 / -1; order: -1; }
+  }
+  label.campo, .campo-gruppo { display: grid; gap: 4px; align-content: start; font-size: 14px; font-weight: 400; color: var(--blu); }
   label.campo small { font-weight: 300; color: var(--grigio); font-size: 13px; }
   input[type=text], input[type=email], input[type=tel], input[type=date], input[type=number], select {
     font: inherit; font-weight: 300; color: var(--testo); width: 100%;
@@ -127,6 +135,11 @@
   button:hover { background: var(--blu-2); }
   button:disabled { opacity: .6; cursor: wait; }
   .errore { color: var(--rosso); font-size: 15px; text-align: center; min-height: 1em; }
+  form > .sicurezza, form > #turnstile { max-width: 520px; width: 100%; justify-self: center; }
+  #turnstile:empty { display: none; }
+  #turnstile { display: flex; justify-content: center; }
+  .sicurezza { display: flex; gap: 8px; align-items: flex-start; justify-content: center; margin: -14px 0 0; font-size: 13px; line-height: 1.4; color: var(--grigio); text-align: left; }
+  .sicurezza svg { flex: none; width: 14px; height: 14px; margin-top: 2px; fill: none; stroke: var(--grigio); stroke-width: 1.6; }
 
   .esito { text-align: center; }
   .numero { font-size: 64px; line-height: 1; color: var(--blu); margin: 8px 0 4px; letter-spacing: .04em; }
@@ -153,10 +166,11 @@
     .fascia { padding: 12px 14px; column-gap: 12px; }
     .fascia .sotto, .fascia .dettaglio > span { font-size: 13px; }
     .fascia .prezzo { font-size: 19px; }
-    label.campo { font-size: 13px; }
+    label.campo, .campo-gruppo { font-size: 13px; }
     label.campo small { font-size: 12px; }
     input[type=text], input[type=email], input[type=tel], input[type=date], input[type=number], select { font-size: 15px; }
     .spunta, .consenso .frase, .scelte label { font-size: 14px; }
+    .sicurezza { font-size: 12px; }
     .riepilogo { font-size: 14px; }
     .riepilogo strong { font-size: 18px; }
     button { font-size: 16px; }
@@ -235,13 +249,41 @@
           </div>
           <div class="riga">
             <label class="campo">Email <input type="email" name="email" id="email" autocomplete="email" required></label>
-            <label class="campo">Cellulare <input type="tel" name="cellulare" id="cellulare" autocomplete="tel" required></label>
+            <div class="campo-gruppo">
+              <label class="campo" for="cellulare">Cellulare</label>
+              <div class="telefono">
+                <input type="tel" name="prefisso" id="prefisso" value="+39" list="prefissi" autocomplete="tel-country-code" aria-label="Prefisso internazionale" maxlength="5">
+                <input type="tel" name="cellulare" id="cellulare" autocomplete="tel-national" inputmode="numeric" maxlength="16" required>
+              </div>
+            </div>
           </div>
-          <label class="campo">Indirizzo <input type="text" name="indirizzo" id="indirizzo" autocomplete="street-address" required></label>
+          <div class="riga riga-via">
+            <label class="campo">Via o piazza <input type="text" name="via" id="via" autocomplete="address-line1" required></label>
+            <label class="campo">Civico <input type="text" name="civico" id="civico" autocomplete="address-line2" maxlength="10"></label>
+          </div>
+          <div class="riga riga-cap">
+            <label class="campo"><span id="etichetta-cap">CAP</span> <input type="text" name="cap" id="cap" autocomplete="postal-code" inputmode="numeric" maxlength="5" required></label>
+            <label class="campo campo-citta">Città <input type="text" name="citta" id="citta" autocomplete="address-level2" required></label>
+            <label class="campo" id="campo-provincia">Provincia <input type="text" name="provincia" id="provincia" autocomplete="address-level1" maxlength="2" placeholder="AL" style="text-transform:uppercase"></label>
+          </div>
           <div class="riga">
-            <label class="campo">CAP <input type="text" name="cap" id="cap" autocomplete="postal-code" inputmode="numeric" maxlength="5" required></label>
-            <label class="campo">Comune <input type="text" name="comune" id="comune" autocomplete="address-level2" required></label>
+            <label class="campo">Paese <input type="text" name="paese" id="paese" value="Italia" list="paesi" autocomplete="country-name" required></label>
+            <label class="campo" id="campo-anno"><span>Anno di nascita <small>(facoltativo)</small></span>
+              <input type="text" name="anno_nascita" id="anno_nascita" inputmode="numeric" maxlength="4" autocomplete="bday-year">
+              <small>Ci aiuta a conoscere l'età dei soci. Lo usiamo solo nei conteggi complessivi.</small>
+            </label>
           </div>
+          <datalist id="prefissi">
+            <option value="+39">Italia</option><option value="+972">Israele</option><option value="+41">Svizzera</option>
+            <option value="+33">Francia</option><option value="+49">Germania</option><option value="+44">Regno Unito</option>
+            <option value="+34">Spagna</option><option value="+43">Austria</option><option value="+32">Belgio</option>
+            <option value="+31">Paesi Bassi</option><option value="+1">Stati Uniti e Canada</option>
+          </datalist>
+          <datalist id="paesi">
+            <option>Italia</option><option>Israele</option><option>Svizzera</option><option>Francia</option><option>Germania</option>
+            <option>Regno Unito</option><option>Spagna</option><option>Austria</option><option>Belgio</option><option>Paesi Bassi</option>
+            <option>Stati Uniti</option><option>Canada</option><option>Argentina</option><option>San Marino</option>
+          </datalist>
           <label class="campo nascosto" id="campo-nascita">Data di nascita
             <input type="date" name="nascita" id="nascita">
             <small>Serve solo per verificare la fascia giovani.</small>
@@ -309,7 +351,10 @@
       </fieldset>
 
       <div class="riepilogo" id="riepilogo"></div>
+      <div id="turnstile"></div>
       <button type="submit" id="invia">Invia la domanda di adesione</button>
+      <p class="sicurezza"><svg viewBox="0 0 16 16" aria-hidden="true"><rect x="3" y="7" width="10" height="7.5" rx="1.5"/><path d="M5.5 7V5a2.5 2.5 0 0 1 5 0v2"/></svg>
+        <span>I tuoi dati viaggiano cifrati e restano all'associazione. Li vede solo la segreteria e non li cediamo a nessuno.</span></p>
       <div class="errore" id="errore" role="alert"></div>
     </form>
   </section>
@@ -335,7 +380,8 @@ const CONFIG = {
   iban: "IT37 O360 8105 1382 9683 6696 867",
   intestatario: "Associazione Italia Israele Alessandria",
   satispay: "",             // link Satispay Business, se attivo
-  paypal: ""                // link PayPal o pagamento con carta, se attivo
+  paypal: "",               // link PayPal o pagamento con carta, se attivo
+  turnstileSiteKey: ""      // chiave pubblica Cloudflare Turnstile, se attivo
 };
 /* ================================================== */
 
@@ -350,6 +396,7 @@ const FASCE = [
 const QUOTA_BASE = 54;
 
 const $ = id => document.getElementById(id);
+const AVVIO = Date.now();
 const euro = n => n.toLocaleString("it-IT") + " €";
 const esc = t => String(t).replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
 
@@ -385,6 +432,7 @@ function aggiorna() {
   $("extra-benemerito").classList.toggle("nascosto", f.id !== "benemerito");
   $("extra-familiare").classList.toggle("nascosto", f.id !== "familiare");
   $("campo-nascita").classList.toggle("nascosto", f.id !== "giovani");
+  $("campo-anno").classList.toggle("nascosto", f.id === "giovani");
   $("blocco-genitore").classList.toggle("nascosto", !minore());
   $("campo-cf").classList.toggle("nascosto", !(f.id === "sostenitore" || f.id === "benemerito"));
   const tot = importoDovuto();
@@ -410,16 +458,48 @@ function minore() {
   return !!(f && f.id === "giovani" && $("nascita").value && eta($("nascita").value) < 18);
 }
 $("nascita").addEventListener("input", aggiorna);
+
+const inItalia = () => $("paese").value.trim().toLowerCase() === "italia";
+function aggiornaPaese() {
+  const it = inItalia();
+  $("campo-provincia").classList.toggle("nascosto", !it);
+  $("etichetta-cap").textContent = it ? "CAP" : "Codice postale";
+  $("cap").maxLength = it ? 5 : 10;
+  $("cap").inputMode = it ? "numeric" : "text";
+}
+$("paese").addEventListener("input", aggiornaPaese);
+aggiornaPaese();
+$("prefisso").addEventListener("blur", () => {
+  const v = $("prefisso").value.replace(/[^\d+]/g, "");
+  $("prefisso").value = v && !v.startsWith("+") ? "+" + v.replace(/^0+/, "") : v;
+});
+
+/* Cloudflare Turnstile, solo se è stata inserita la chiave */
+let turnstileId = null;
+if (CONFIG.turnstileSiteKey) {
+  window.avviaTurnstile = () => {
+    turnstileId = turnstile.render("#turnstile", { sitekey: CONFIG.turnstileSiteKey, language: "it", theme: "light" });
+  };
+  const sc = document.createElement("script");
+  sc.src = "https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit&onload=avviaTurnstile";
+  sc.async = true; sc.defer = true;
+  document.head.appendChild(sc);
+}
 const CF_RE = /^[A-Z]{6}[0-9LMNPQRSTUV]{2}[ABCDEHLMPRST][0-9LMNPQRSTUV]{2}[A-Z][0-9LMNPQRSTUV]{3}[A-Z]$/;
 
 function valida() {
   const f = fasciaScelta();
   if (!f) { $("fasce").scrollIntoView({ behavior: "smooth", block: "center" }); return "Scegli la tua quota."; }
-  const obblig = ["nome", "cognome", "email", "cellulare", "indirizzo", "cap", "comune"];
+  const obblig = ["nome", "cognome", "email", "prefisso", "cellulare", "via", "cap", "citta", "paese"];
   for (const id of obblig) if (!$(id).value.trim()) { $(id).focus(); return "Mancano alcuni dati obbligatori."; }
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test($("email").value.trim())) { $("email").focus(); return "L'indirizzo email non sembra corretto."; }
   if (tipo === "rinnovo" && $("tessera").value.trim() && !/^\d{1,3}$/.test($("tessera").value.trim())) { $("tessera").focus(); return "Il numero di tessera è fatto solo di cifre."; }
-  if (!/^\d{5}$/.test($("cap").value.trim())) { $("cap").focus(); return "Il CAP deve avere cinque cifre."; }
+  if (!/^\+\d{1,4}$/.test($("prefisso").value.trim())) { $("prefisso").focus(); return "Il prefisso deve essere nella forma +39."; }
+  if (!/^[\d\s]{5,16}$/.test($("cellulare").value.trim())) { $("cellulare").focus(); return "Il numero di cellulare può contenere solo cifre."; }
+  if (inItalia() && !/^\d{5}$/.test($("cap").value.trim())) { $("cap").focus(); return "Il CAP deve avere cinque cifre."; }
+  if (inItalia() && !/^[A-Za-z]{2}$/.test($("provincia").value.trim())) { $("provincia").focus(); return "Indica la sigla della provincia, per esempio AL."; }
+  const anno = $("anno_nascita").value.trim();
+  if (f.id !== "giovani" && anno && !(/^\d{4}$/.test(anno) && anno >= 1900 && anno <= new Date().getFullYear())) { $("anno_nascita").focus(); return "L'anno di nascita non sembra corretto."; }
   if (f.id === "giovani") {
     if (!$("nascita").value) { $("nascita").focus(); return "Per la fascia giovani serve la data di nascita."; }
     if (eta($("nascita").value) >= 26) { $("nascita").focus(); return "La fascia giovani è riservata a chi non ha ancora compiuto 26 anni."; }
@@ -437,6 +517,7 @@ function valida() {
   for (const n of ["albo", "immagini", "newsletter"]) {
     if (!document.querySelector(`input[name=${n}]:checked`)) return "Indica se acconsenti o no per ciascuna delle tre voci facoltative.";
   }
+  if (CONFIG.turnstileSiteKey && !(window.turnstile && turnstile.getResponse(turnstileId))) return "Attendi la verifica di sicurezza qui sopra, poi invia.";
   return "";
 }
 
@@ -461,16 +542,21 @@ function datiModulo() {
     tipo: tipo, tessera: tipo === "rinnovo" ? $("tessera").value.trim() : "",
     fascia: f.id, importo: tot, quota: quota, liberalita: tot - quota,
     nome: $("nome").value.trim(), cognome: $("cognome").value.trim(),
-    email: $("email").value.trim(), cellulare: $("cellulare").value.trim(),
-    indirizzo: $("indirizzo").value.trim(), cap: $("cap").value.trim(), comune: $("comune").value.trim(),
+    email: $("email").value.trim(), prefisso: $("prefisso").value.trim(), cellulare: $("cellulare").value.trim(),
+    via: $("via").value.trim(), civico: $("civico").value.trim(), cap: $("cap").value.trim().toUpperCase(),
+    citta: $("citta").value.trim(), provincia: inItalia() ? $("provincia").value.trim().toUpperCase() : "",
+    paese: $("paese").value.trim(),
     nascita: f.id === "giovani" ? $("nascita").value : "",
+    anno_nascita: f.id === "giovani" ? "" : $("anno_nascita").value.trim(),
     cf: (f.id === "sostenitore" || f.id === "benemerito") ? $("cf").value.trim().toUpperCase() : "",
     familiare: f.id === "familiare" ? $("familiare").value.trim() : "",
     genitore: minore() ? $("genitore").value.trim() : "",
     dichiarazione_genitore: minore() ? $("dich-genitore").checked : false,
     fonte: tipo === "rinnovo" ? "" : $("fonte").value,
     consenso_albo: scelta("albo"), consenso_immagini: scelta("immagini"), consenso_newsletter: scelta("newsletter"),
-    sito: $("sito").value
+    sito: $("sito").value,
+    tempo: Date.now() - AVVIO,
+    turnstile: CONFIG.turnstileSiteKey && window.turnstile ? turnstile.getResponse(turnstileId) || "" : ""
   };
 }
 
@@ -516,7 +602,10 @@ $("modulo").addEventListener("submit", async e => {
     }
     mostraEsito(numero, dati);
   } catch (x) {
-    $("errore").textContent = "Non siamo riusciti a registrare la domanda. Riprova tra poco o scrivici a italia.israele.al@gmail.com.";
+    $("errore").textContent = /Verifica/.test(x.message)
+      ? "La verifica di sicurezza non è andata a buon fine. Riprova."
+      : "Non siamo riusciti a registrare la domanda. Riprova tra poco o scrivici a italia.israele.al@gmail.com.";
+    if (turnstileId !== null) turnstile.reset(turnstileId);
     btn.disabled = false; btn.textContent = "Invia la domanda di adesione";
   }
 });
