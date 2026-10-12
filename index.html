@@ -83,7 +83,7 @@
   .fascia .prezzo { font-size: 22px; color: var(--blu); white-space: nowrap; }
   .fascia.onoraria { cursor: default; }
   .fascia.onoraria:hover { border-color: var(--linea); }
-  .fascia.onoraria .stella { width: 18px; text-align: center; color: var(--blu); font-size: 18px; }
+  .fascia.onoraria .stella { width: 22px; height: 22px; margin: 0 -2px; fill: none; stroke: var(--blu); stroke-width: 1.5; stroke-linejoin: round; }
   .fascia.onoraria .prezzo { font-size: 17px; }
 
   .riquadro { background: var(--carta); border: 1px solid var(--linea); border-radius: var(--raggio); padding: 18px 16px; display: grid; gap: 14px; }
@@ -410,7 +410,7 @@ const esc = t => String(t).replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;"
 
 $("fasce").innerHTML = FASCE.map(f => f.onorario ? `
   <div class="fascia onoraria" title="Per personalità e istituzioni, su nomina del direttivo">
-    <span class="stella" aria-hidden="true">✡</span>
+    <svg class="stella" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.5 20.2 16.75H3.8Z M12 21.5 3.8 7.25H20.2Z"/></svg>
     <span><span class="titolo">${f.titolo}</span><span class="sotto">${f.chai}</span></span>
     <span class="prezzo"><em>ad honorem</em></span>
   </div>` : `
