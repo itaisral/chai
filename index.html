@@ -589,8 +589,9 @@ function datiModulo() {
   };
 }
 
-function mostraEsito(numero, dati) {
+function mostraEsito(numero, dati, ripetuta, importo) {
   const rinnovo = dati.tipo === "rinnovo";
+  numero = /^\d{1,3}$/.test(String(numero || "")) ? String(numero).padStart(3, "0") : "";
   const rif = numero ? `tessera ${numero}` : "rinnovo";
   const causale = `Quota ${CONFIG.annoSociale} ${rif} ${dati.nome} ${dati.cognome}`;
   const blocchi = [];
@@ -600,12 +601,14 @@ function mostraEsito(numero, dati) {
   if (CONFIG.paypal) blocchi.push(`<div class="pagamento"><div class="titolo">PayPal o carta</div><a href="${CONFIG.paypal}" target="_blank" rel="noopener">Paga online</a>, indicando nella nota ${esc(rif)} e il tuo nome.</div>`);
   blocchi.push(`<div class="pagamento"><div class="titolo">Di persona</div>In contanti o con carta alla prossima cena o al prossimo incontro dell'associazione.</div>`);
   $("pagamenti").innerHTML = blocchi.join("");
-  $("esito-titolo").textContent = rinnovo ? "Bentornato" : "Benvenuto";
-  $("esito-intro").textContent = rinnovo ? (numero ? "La tua tessera resta la numero" : "La tua tessera resta quella di sempre") : "La tua tessera porta il numero";
+  $("esito-titolo").textContent = ripetuta ? "La tua domanda era già arrivata" : (rinnovo ? "Bentornato" : "Benvenuto");
+  $("esito-intro").textContent = ripetuta
+    ? (numero ? "Il tuo numero resta" : "La tua tessera resta quella di sempre")
+    : rinnovo ? (numero ? "La tua tessera resta la numero" : "La tua tessera resta quella di sempre") : "La tua tessera porta il numero";
   $("esito-numero").classList.toggle("nascosto", !numero);
-  $("esito-nota").textContent = rinnovo ? "Ti abbiamo mandato una mail di conferma. Il rinnovo è completo quando riceviamo la quota di" : "Ti abbiamo mandato una mail di conferma. Il numero diventa definitivo quando riceviamo la quota di";
+  $("esito-nota").textContent = ripetuta ? "Ti abbiamo rimandato la mail con le indicazioni. Se volevi cambiare qualcosa, rispondi a quella mail. Manca solo la quota di" : rinnovo ? "Ti abbiamo mandato una mail di conferma. Il rinnovo è completo quando riceviamo la quota di" : "Ti abbiamo mandato una mail di conferma. Il numero diventa definitivo quando riceviamo la quota di";
   $("esito-numero").textContent = numero;
-  $("esito-importo").textContent = euro(dati.importo);
+  $("esito-importo").textContent = euro(importo || dati.importo);
   $("sezione-modulo").classList.add("nascosto");
   $("sezione-esito").classList.remove("nascosto");
   window.scrollTo({ top: 0, behavior: "smooth" });
@@ -620,16 +623,16 @@ $("modulo").addEventListener("submit", async e => {
   const btn = $("invia");
   btn.disabled = true; btn.textContent = "Invio in corso…";
   try {
-    let numero;
+    let numero, ripetuta = false, importo = 0;
     if (!CONFIG.scriptUrl) {
       numero = dati.tipo === "rinnovo" ? (dati.tessera ? dati.tessera.padStart(3, "0") : "") : "026"; // anteprima, nessun dato viene inviato
     } else {
       const r = await fetch(CONFIG.scriptUrl, { method: "POST", headers: { "Content-Type": "text/plain;charset=utf-8" }, body: JSON.stringify(dati) });
       const j = await r.json();
       if (!j.ok) throw new Error(j.errore || "Errore");
-      numero = j.numero;
+      numero = j.numero; ripetuta = !!j.ripetuta; importo = Number(j.importo) || 0;
     }
-    mostraEsito(numero, dati);
+    mostraEsito(numero, dati, ripetuta, importo);
   } catch (x) {
     $("errore").textContent = /Verifica/.test(x.message)
       ? "La verifica di sicurezza non è andata a buon fine. Riprova."
