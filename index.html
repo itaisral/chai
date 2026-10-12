@@ -135,6 +135,10 @@
   button:hover { background: var(--blu-2); }
   button:disabled { opacity: .6; cursor: wait; }
   .errore { color: var(--rosso); font-size: 15px; text-align: center; min-height: 1em; }
+  input.errato, select.errato { border-color: var(--rosso); box-shadow: 0 0 0 1px var(--rosso); background: #fff6f5; }
+  .consenso.errato, .fasce.errato .fascia:not(.onoraria) { border-color: var(--rosso); box-shadow: 0 0 0 1px var(--rosso); }
+  .spunta.errato { color: var(--rosso); }
+  .spunta.errato input { outline: 2px solid var(--rosso); outline-offset: 1px; }
   form > .sicurezza, form > #turnstile { max-width: 520px; width: 100%; justify-self: center; }
   #turnstile:empty { display: none; }
   #turnstile { display: flex; justify-content: center; }
@@ -487,37 +491,62 @@ if (CONFIG.turnstileSiteKey) {
 }
 const CF_RE = /^[A-Z]{6}[0-9LMNPQRSTUV]{2}[ABCDEHLMPRST][0-9LMNPQRSTUV]{2}[A-Z][0-9LMNPQRSTUV]{3}[A-Z]$/;
 
+/* evidenzia in rosso i campi da correggere */
+function segna(el) {
+  const box = el.closest(".consenso") || el.closest(".spunta") || (el.id === "fasce" ? el : null);
+  (box || el).classList.add("errato");
+}
+function sbaglio(msg, ...els) {
+  els.forEach(segna);
+  const primo = els[0];
+  if (primo) {
+    if (primo.matches("input:not([type=radio]):not([type=checkbox]), select")) primo.focus();
+    primo.scrollIntoView({ behavior: "smooth", block: "center" });
+  }
+  return msg;
+}
+function pulisci(e) {
+  const el = e.target;
+  el.classList.remove("errato");
+  const box = el.closest(".consenso, .spunta, .fasce");
+  if (box) box.classList.remove("errato");
+}
+document.addEventListener("input", pulisci);
+document.addEventListener("change", pulisci);
+
 function valida() {
+  document.querySelectorAll(".errato").forEach(x => x.classList.remove("errato"));
   const f = fasciaScelta();
-  if (!f) { $("fasce").scrollIntoView({ behavior: "smooth", block: "center" }); return "Scegli la tua quota."; }
+  if (!f) return sbaglio("Scegli la tua quota.", $("fasce"));
   const obblig = ["nome", "cognome", "email", "prefisso", "cellulare", "via", "cap", "citta", "paese"];
-  for (const id of obblig) if (!$(id).value.trim()) { $(id).focus(); return "Mancano alcuni dati obbligatori."; }
-  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test($("email").value.trim())) { $("email").focus(); return "L'indirizzo email non sembra corretto."; }
-  if (tipo === "rinnovo" && $("tessera").value.trim() && !/^\d{1,3}$/.test($("tessera").value.trim())) { $("tessera").focus(); return "Il numero di tessera è fatto solo di cifre."; }
-  if (!/^\+\d{1,4}$/.test($("prefisso").value.trim())) { $("prefisso").focus(); return "Il prefisso deve essere nella forma +39."; }
-  if (!/^[\d\s]{5,16}$/.test($("cellulare").value.trim())) { $("cellulare").focus(); return "Il numero di cellulare può contenere solo cifre."; }
-  if (inItalia() && !/^\d{5}$/.test($("cap").value.trim())) { $("cap").focus(); return "Il CAP deve avere cinque cifre."; }
-  if (inItalia() && !/^[A-Za-z]{2}$/.test($("provincia").value.trim())) { $("provincia").focus(); return "Indica la sigla della provincia, per esempio AL."; }
+  const vuoti = obblig.map($).filter(x => !x.value.trim());
+  if (vuoti.length) return sbaglio(vuoti.length === 1 ? "Manca un dato obbligatorio." : "Mancano alcuni dati obbligatori.", ...vuoti);
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test($("email").value.trim())) return sbaglio("L'indirizzo email non sembra corretto.", $("email"));
+  if (tipo === "rinnovo" && $("tessera").value.trim() && !/^\d{1,3}$/.test($("tessera").value.trim())) return sbaglio("Il numero di tessera è fatto solo di cifre.", $("tessera"));
+  if (!/^\+\d{1,4}$/.test($("prefisso").value.trim())) return sbaglio("Il prefisso deve essere nella forma +39.", $("prefisso"));
+  if (!/^[\d\s]{5,16}$/.test($("cellulare").value.trim())) return sbaglio("Il numero di cellulare può contenere solo cifre.", $("cellulare"));
+  if (inItalia() && !/^\d{5}$/.test($("cap").value.trim())) return sbaglio("Il CAP deve avere cinque cifre.", $("cap"));
+  if (inItalia() && !/^[A-Za-z]{2}$/.test($("provincia").value.trim())) return sbaglio("Indica la sigla della provincia, per esempio AL.", $("provincia"));
   const anno = $("anno_nascita").value.trim();
-  if (f.id !== "giovani" && anno && !(/^\d{4}$/.test(anno) && anno >= 1900 && anno <= new Date().getFullYear())) { $("anno_nascita").focus(); return "L'anno di nascita non sembra corretto."; }
+  if (f.id !== "giovani" && anno && !(/^\d{4}$/.test(anno) && anno >= 1900 && anno <= new Date().getFullYear())) return sbaglio("L'anno di nascita non sembra corretto.", $("anno_nascita"));
   if (f.id === "giovani") {
-    if (!$("nascita").value) { $("nascita").focus(); return "Per la fascia giovani serve la data di nascita."; }
-    if (eta($("nascita").value) >= 26) { $("nascita").focus(); return "La fascia giovani è riservata a chi non ha ancora compiuto 26 anni."; }
+    if (!$("nascita").value) return sbaglio("Per la fascia giovani serve la data di nascita.", $("nascita"));
+    if (eta($("nascita").value) >= 26) return sbaglio("La fascia giovani è riservata a chi non ha ancora compiuto 26 anni.", $("nascita"));
     if (minore()) {
-      if (!$("genitore").value.trim()) { $("genitore").focus(); return "Per un minore serve il nome del genitore."; }
-      if (!$("dich-genitore").checked) return "Per un minore serve la dichiarazione del genitore.";
+      const g = [];
+      if (!$("genitore").value.trim()) g.push($("genitore"));
+      if (!$("dich-genitore").checked) g.push($("dich-genitore"));
+      if (g.length) return sbaglio("Per un minore servono il nome e la dichiarazione del genitore.", ...g);
     }
   }
-  if (f.id === "familiare" && !$("familiare").value.trim()) { $("familiare").focus(); return "Indica il familiare già socio."; }
-  if (f.id === "sostenitore" || f.id === "benemerito") {
-    const cf = $("cf").value.trim().toUpperCase();
-    if (!CF_RE.test(cf)) { $("cf").focus(); return "Il codice fiscale non sembra corretto."; }
-  }
-  if (!$("statuto").checked || !$("privacy").checked) return "Per aderire servono le due dichiarazioni obbligatorie.";
-  for (const n of ["albo", "immagini", "newsletter"]) {
-    if (!document.querySelector(`input[name=${n}]:checked`)) return "Indica se acconsenti o no per ciascuna delle tre voci facoltative.";
-  }
-  if (CONFIG.turnstileSiteKey && !(window.turnstile && turnstile.getResponse(turnstileId))) return "Attendi la verifica di sicurezza qui sopra, poi invia.";
+  if (f.id === "familiare" && !$("familiare").value.trim()) return sbaglio("Indica il familiare già socio.", $("familiare"));
+  if ((f.id === "sostenitore" || f.id === "benemerito") && !CF_RE.test($("cf").value.trim().toUpperCase())) return sbaglio("Il codice fiscale non sembra corretto.", $("cf"));
+  const dich = ["statuto", "privacy"].map($).filter(x => !x.checked);
+  if (dich.length) return sbaglio("Per aderire servono le due dichiarazioni obbligatorie.", ...dich);
+  const consensi = ["albo", "immagini", "newsletter"].filter(n => !document.querySelector(`input[name=${n}]:checked`))
+    .map(n => document.querySelector(`input[name=${n}]`));
+  if (consensi.length) return sbaglio("Indica se acconsenti o no per ciascuna delle tre voci facoltative.", ...consensi);
+  if (CONFIG.turnstileSiteKey && !(window.turnstile && turnstile.getResponse(turnstileId))) return sbaglio("Attendi la verifica di sicurezza qui sopra, poi invia.", $("turnstile"));
   return "";
 }
 
