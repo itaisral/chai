@@ -60,6 +60,7 @@
   .tipo-scelta:focus:not(:focus-visible) { outline: none; }
   .tipo-he { font-family: "Frank Ruhl Libre", serif; font-size: 25px; line-height: 1.15; color: var(--blu); }
   .tipo-tr { font-size: 14px; color: var(--grigio); line-height: 1.2; }
+  .tipo-sig { font-size: 12px; color: var(--grigio); line-height: 1.2; }
   .tipo-it { margin-top: 2px; font-size: 20px; font-weight: 300; line-height: 1.15; color: var(--blu); }
   #tessera { max-width: 120px; }
   .validita { margin: -6px 0 12px; font-size: 14px; color: var(--grigio); }
@@ -168,6 +169,7 @@
     .tipo-he { font-size: 21px; }
     .tipo-it { font-size: 17px; white-space: nowrap; }
     .tipo-tr { font-size: 12px; }
+    .tipo-sig { font-size: 11px; }
     .chai { font-size: 56px; }
     h1 { font-size: 28px; }
     legend { font-size: 12px; }
@@ -216,11 +218,13 @@
       <button type="button" class="tipo-scelta" data-tipo="nuovo" aria-pressed="false">
         <span class="tipo-he" lang="he" dir="rtl">ברוך הבא</span>
         <span class="tipo-tr"><em>Baruch haba</em></span>
+        <span class="tipo-sig">benvenuto</span>
         <span class="tipo-it">Nuova tessera</span>
       </button>
       <button type="button" class="tipo-scelta" data-tipo="rinnovo" aria-pressed="false">
         <span class="tipo-he" lang="he" dir="rtl">ברוך השב</span>
         <span class="tipo-tr"><em>Baruch hashav</em></span>
+        <span class="tipo-sig">bentornato</span>
         <span class="tipo-it">Rinnovo</span>
       </button>
     </div>
