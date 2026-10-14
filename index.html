@@ -147,6 +147,7 @@
   .spunta.errato input { outline: 2px solid var(--rosso); outline-offset: 1px; }
   form > .sicurezza, form > #turnstile { max-width: 520px; width: 100%; justify-self: center; }
   #turnstile:empty { display: none; }
+  .nota-campo { display: block; margin-top: 4px; font-size: 13px; line-height: 1.4; color: var(--grigio); letter-spacing: normal; text-transform: none; font-weight: 300; }
   #turnstile { display: flex; justify-content: center; }
   .sicurezza { display: flex; gap: 8px; align-items: flex-start; justify-content: center; margin: -14px 0 0; font-size: 13px; line-height: 1.4; color: var(--grigio); text-align: left; }
   .sicurezza svg { flex: none; width: 14px; height: 14px; margin-top: 2px; fill: none; stroke: var(--grigio); stroke-width: 1.6; }
@@ -295,7 +296,7 @@
             <label class="campo">Cognome <input type="text" name="cognome" id="cognome" autocomplete="family-name" required></label>
           </div>
           <div class="riga">
-            <label class="campo">Email <input type="email" name="email" id="email" autocomplete="email" required></label>
+            <label class="campo">Email <input type="email" name="email" id="email" autocomplete="email" required><span class="nota-campo">La stessa email ti servirà per entrare nell’area soci del sito.</span></label>
             <div class="campo-gruppo">
               <label class="campo" for="cellulare">Cellulare</label>
               <div class="telefono">
