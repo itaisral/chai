@@ -222,13 +222,8 @@
     </nav>
   </div>
 </div>
+<div class="barra-spazio"></div>
 <!--/barra-->
-<div class="barra-spazio"></div>
-<div class="barra-spazio"></div>
-<div class="barra-spazio"></div>
-<div class="barra-spazio"></div>
-<div class="barra-spazio"></div>
-<div class="barra-spazio"></div>
 
 <div class="pagina">
 
@@ -404,7 +399,8 @@
   </section>
 
   <section id="sezione-esito" class="esito nascosto" aria-live="polite">
-    <h1 id="esito-titolo">Benvenuto</h1>
+    <div class="chai" lang="he" dir="rtl" aria-hidden="true">חי</div>
+    <h1 id="esito-titolo">Benvenuto!</h1>
     <div id="esito-intro">La tua tessera porta il numero</div>
     <div class="numero" id="esito-numero">026</div>
     <div class="sotto"><span id="esito-nota">Ti abbiamo mandato una mail di conferma. Il numero diventa definitivo quando riceviamo la quota di</span> <strong id="esito-importo"></strong>.</div>
@@ -665,9 +661,8 @@ function mostraEsito(numero, dati, ripetuta, importo) {
     IBAN <code>${CONFIG.iban}</code><br>intestato a ${CONFIG.intestatario}<br>causale <code>${esc(causale)}</code></div>`);
   if (CONFIG.satispay) blocchi.push(`<div class="pagamento"><div class="titolo">Satispay</div><a href="${CONFIG.satispay}" target="_blank" rel="noopener">Paga con Satispay</a>, indicando nel messaggio ${esc(rif)} e il tuo nome.</div>`);
   if (CONFIG.paypal) blocchi.push(`<div class="pagamento"><div class="titolo">PayPal o carta</div><a href="${CONFIG.paypal}" target="_blank" rel="noopener">Paga online</a>, indicando nella nota ${esc(rif)} e il tuo nome.</div>`);
-  blocchi.push(`<div class="pagamento"><div class="titolo">Di persona</div>In contanti o con carta alla prossima cena o al prossimo incontro dell'associazione.</div>`);
   $("pagamenti").innerHTML = blocchi.join("");
-  $("esito-titolo").textContent = ripetuta ? "La tua domanda era già arrivata" : (rinnovo ? "Bentornato" : "Benvenuto");
+  $("esito-titolo").textContent = ripetuta ? "La tua domanda era già arrivata" : (rinnovo ? "Bentornato!" : "Benvenuto!");
   $("esito-intro").textContent = ripetuta
     ? (numero ? "Il tuo numero resta" : "La tua tessera resta quella di sempre")
     : rinnovo ? (numero ? "La tua tessera resta la numero" : "La tua tessera resta quella di sempre") : "La tua tessera porta il numero";
