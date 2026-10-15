@@ -329,10 +329,6 @@
             <label class="spunta"><input type="checkbox" id="dich-genitore">
               <span>Sono il genitore o chi esercita la responsabilità genitoriale e presento la domanda per conto del minore.</span></label>
           </div>
-          <label class="campo nascosto" id="campo-cf">Codice fiscale
-            <input type="text" name="cf" id="cf" maxlength="16" autocomplete="off" style="text-transform:uppercase">
-            <small>Serve per intestarti la ricevuta della donazione.</small>
-          </label>
           <div class="riga">
           <label class="campo" id="campo-anno"><span>Anno di nascita <small>(facoltativo)</small></span>
             <input type="text" name="anno_nascita" id="anno_nascita" inputmode="numeric" maxlength="4" autocomplete="bday-year">
@@ -425,8 +421,8 @@ const FASCE = [
   { id: "giovani",     titolo: "Giovani",     chai: "un <em>chai</em>",            dettaglio: "Per chi non ha ancora compiuto 26 anni.", importo: 18 },
   { id: "familiare",   titolo: "Familiare",   chai: "doppio <em>chai</em>",        dettaglio: "Per il secondo componente di un nucleo in cui c'è già un socio.", importo: 36 },
   { id: "ordinario",   titolo: "Ordinario",   chai: "triplo <em>chai</em>",        dettaglio: "La quota associativa annuale.", importo: 54 },
-  { id: "sostenitore", titolo: "Sostenitore", chai: "dieci volte <em>chai</em>",   dettaglio: "54 € di quota associativa e 126 € di donazione all'associazione.", importo: 180 },
-  { id: "benemerito",  titolo: "Benemerito",  chai: "venti volte <em>chai</em>",   dettaglio: "Da 360 € in su, per chi vuole sostenerci di più. 54 € di quota, il resto è una donazione.", importo: 360, libero: true },
+  { id: "sostenitore", titolo: "Sostenitore", chai: "dieci volte <em>chai</em>",   dettaglio: "La quota di chi vuole sostenerci di più.", importo: 180 },
+  { id: "benemerito",  titolo: "Benemerito",  chai: "venti volte <em>chai</em>",   dettaglio: "Da 360 € in su, la quota di chi vuole essere al nostro fianco in modo speciale.", importo: 360, libero: true },
   { id: "onorario",    titolo: "Onorario",    chai: "su nomina del direttivo",      onorario: true }
 ];
 const QUOTA_BASE = 54;
@@ -465,7 +461,7 @@ function importoDovuto() {
 function aggiorna() {
   const f = fasciaScelta();
   if (!f) {
-    ["extra-benemerito", "extra-familiare", "campo-nascita", "campo-cf", "blocco-genitore"].forEach(id => $(id).classList.add("nascosto"));
+    ["extra-benemerito", "extra-familiare", "campo-nascita", "blocco-genitore"].forEach(id => $(id).classList.add("nascosto"));
     $("riepilogo").innerHTML = "";
     return;
   }
@@ -474,12 +470,8 @@ function aggiorna() {
   $("campo-nascita").classList.toggle("nascosto", f.id !== "giovani");
   $("campo-anno").classList.toggle("nascosto", f.id === "giovani");
   $("blocco-genitore").classList.toggle("nascosto", !minore());
-  $("campo-cf").classList.toggle("nascosto", !(f.id === "sostenitore" || f.id === "benemerito"));
   const tot = importoDovuto();
   let testo = `Quota ${f.titolo.toLowerCase()} <strong>${euro(tot)}</strong>`;
-  if (tot > QUOTA_BASE && f.id !== "familiare" && f.id !== "giovani") {
-    testo += `<br>${euro(QUOTA_BASE)} di quota associativa e ${euro(tot - QUOTA_BASE)} di donazione`;
-  }
   $("riepilogo").innerHTML = testo;
 }
 document.addEventListener("change", aggiorna);
@@ -601,7 +593,6 @@ function valida() {
     }
   }
   if (f.id === "familiare" && !$("familiare").value.trim()) return sbaglio("Indica il familiare già socio.", $("familiare"));
-  if ((f.id === "sostenitore" || f.id === "benemerito") && !CF_RE.test($("cf").value.trim().toUpperCase())) return sbaglio("Il codice fiscale non sembra corretto.", $("cf"));
   const dich = ["statuto", "privacy"].map($).filter(x => !x.checked);
   if (dich.length) return sbaglio("Per aderire servono le due dichiarazioni obbligatorie.", ...dich);
   const consensi = ["albo", "immagini", "newsletter"].filter(n => !document.querySelector(`input[name=${n}]:checked`))
@@ -630,7 +621,7 @@ function datiModulo() {
   const quota = (f.id === "giovani" || f.id === "familiare") ? tot : QUOTA_BASE;
   return {
     tipo: tipo, tessera: tipo === "rinnovo" ? $("tessera").value.trim() : "",
-    fascia: f.id, importo: tot, quota: quota, liberalita: tot - quota,
+    fascia: f.id, importo: tot, quota: tot, liberalita: 0,
     nome: $("nome").value.trim(), cognome: $("cognome").value.trim(),
     email: $("email").value.trim(), prefisso: $("prefisso").value.trim(), cellulare: $("cellulare").value.trim(),
     via: $("via").value.trim(), civico: $("civico").value.trim(), cap: $("cap").value.trim().toUpperCase(),
@@ -639,7 +630,7 @@ function datiModulo() {
     paese: $("paese").value.trim(),
     nascita: f.id === "giovani" ? $("nascita").value : "",
     anno_nascita: f.id === "giovani" ? "" : $("anno_nascita").value.trim(),
-    cf: (f.id === "sostenitore" || f.id === "benemerito") ? $("cf").value.trim().toUpperCase() : "",
+    cf: "",
     familiare: f.id === "familiare" ? $("familiare").value.trim() : "",
     genitore: minore() ? $("genitore").value.trim() : "",
     dichiarazione_genitore: minore() ? $("dich-genitore").checked : false,
