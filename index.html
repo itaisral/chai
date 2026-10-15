@@ -202,8 +202,8 @@
   }
 </style>
 <!--testa-barra-->
-<link rel="stylesheet" href="/font/font.css?v=20261015z">
-<link rel="stylesheet" href="/barra.css?v=20261015z">
+<link rel="stylesheet" href="/font/font.css?v=20261015za">
+<link rel="stylesheet" href="/barra.css?v=20261015za">
 <!--/testa-barra-->
 </head>
 <body>
@@ -246,7 +246,7 @@
       Il popolo d'Israele vive.</p>
       <p>Per questo si dona in multipli di diciotto, e così abbiamo fatto anche noi.<br>
       Ogni tessera è un piccolo brindisi alla vita, che ha sempre l'ultima parola.</p>
-      <p>Le tessere da 001 a 022 appartengono ai soci fondatori. Chi arriva dopo di loro, fino alla tessera 100, è socio del rilancio. Il numero gli resta finché rinnova, e il suo nome entrerà in un albo che ricorda chi ha creduto nel progetto fin dall'inizio.</p>
+      <p>Le tessere da 001 a 022 appartengono ai soci fondatori. Chi arriva dopo di loro, fino alla tessera 100, è socio del rilancio, e il numero gli resta finché rinnova.</p>
     </div>
 
     <div class="tipo" role="radiogroup" aria-label="Adesione o rinnovo">
@@ -367,28 +367,6 @@
             <span>Ho letto l'<a href="privacy.html" target="_blank" rel="noopener">informativa sulla privacy</a>. <span class="obbl">*</span></span></label>
           <div class="gruppo-nota" style="margin-top:12px">Facoltative</div>
           <p class="nota-consensi">Rispondi sì o no a ciascuna voce. L’adesione vale in entrambi i casi, e la tua scelta resta registrata con chiarezza.</p>
-          <div class="consenso">
-            <div class="frase">Pubblicazione del mio nome nell'albo dei soci del rilancio, se rientro tra i soci del rilancio.</div>
-            <div class="scelte">
-              <label><input type="radio" name="albo" value="si"> Acconsento</label>
-              <label><input type="radio" name="albo" value="no"> Non acconsento</label>
-            </div>
-          </div>
-          <div class="consenso">
-            <div class="frase">Uso di foto e video degli eventi in cui posso comparire.</div>
-            <div class="scelte">
-              <label><input type="radio" name="immagini" value="si"> Acconsento</label>
-              <label><input type="radio" name="immagini" value="no"> Non acconsento</label>
-            </div>
-          </div>
-          <div class="consenso">
-            <div class="frase">Invio della newsletter mensile al mio indirizzo email.</div>
-            <div class="scelte">
-              <label><input type="radio" name="newsletter" value="si"> Acconsento</label>
-              <label><input type="radio" name="newsletter" value="no"> Non acconsento</label>
-            </div>
-          </div>
-        </div>
       </fieldset>
 
       <div class="riepilogo" id="riepilogo"></div>
@@ -601,9 +579,9 @@ function valida() {
   if (f.id === "familiare" && !$("familiare").value.trim()) return sbaglio("Indica il familiare già socio.", $("familiare"));
   const dich = ["statuto", "privacy"].map($).filter(x => !x.checked);
   if (dich.length) return sbaglio("Per aderire servono le due dichiarazioni obbligatorie.", ...dich);
-  const consensi = ["albo", "immagini", "newsletter"].filter(n => !document.querySelector(`input[name=${n}]:checked`))
+  const consensi = ["immagini", "newsletter"].filter(n => !document.querySelector(`input[name=${n}]:checked`))
     .map(n => document.querySelector(`input[name=${n}]`));
-  if (consensi.length) return sbaglio("Indica se acconsenti o no per ciascuna delle tre voci facoltative.", ...consensi);
+  if (consensi.length) return sbaglio("Indica se acconsenti o no per ciascuna delle due voci facoltative.", ...consensi);
   if (CONFIG.turnstileSiteKey && !(window.turnstile && turnstile.getResponse(turnstileId))) return sbaglio("Attendi la verifica di sicurezza qui sopra, poi invia.", $("turnstile"));
   return "";
 }
@@ -641,7 +619,7 @@ function datiModulo() {
     genitore: minore() ? $("genitore").value.trim() : "",
     dichiarazione_genitore: minore() ? $("dich-genitore").checked : false,
     fonte: tipo === "rinnovo" ? "" : $("fonte").value,
-    consenso_albo: scelta("albo"), consenso_immagini: scelta("immagini"), consenso_newsletter: scelta("newsletter"),
+    consenso_immagini: scelta("immagini"), consenso_newsletter: scelta("newsletter"),
     sito: $("sito").value,
     tempo: Date.now() - AVVIO,
     turnstile: CONFIG.turnstileSiteKey && window.turnstile ? turnstile.getResponse(turnstileId) || "" : ""
@@ -740,7 +718,7 @@ $("modulo").addEventListener("submit", async e => {
     </div>
   </div>
 </div>
-<script src="/barra.js?v=20261015z" defer></script>
+<script src="/barra.js?v=20261015za" defer></script>
 <!--/piede-->
 </body>
 </html>
