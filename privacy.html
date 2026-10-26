@@ -5,10 +5,27 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Informativa privacy · Associazione Italia Israele Alessandria</title>
 <style>
-  :root { --blu:#18304e; --blu-2:#224774; --testo:#1f2023; --grigio:#6b6f76; --linea:#e4ddd1; --fondo:#fbf8f2; }
+  :root { --blu:#18304e; --blu-2:#224774; --rosso:#b12218; --testo:#1f2023; --grigio:#6b6f76; --linea:#e4ddd1; --fondo:#fbf8f2; }
   * { box-sizing: border-box; }
-  body { margin:0; background:var(--fondo); color:var(--testo); font-family:"Titillium Web",system-ui,sans-serif; font-weight:300; font-size:16px; line-height:1.65; }
-  .pagina { max-width:720px; margin:0 auto; padding:32px 16px 64px; }
+  body { margin:0; background:var(--fondo); color:var(--testo); font-family:"Titillium Web",system-ui,sans-serif; font-weight:300; font-size:18px; line-height:1.75; }
+  @media (max-width:560px) { body { font-size:17px; } }
+  .pagina { max-width:720px; margin:0 auto; padding:64px 24px 64px; }
+  @media (max-width:560px) { .pagina { padding:48px 16px 64px; } }
+  /* testata come nelle altre pagine del sito */
+  .testata-sito { padding: 52px 0 40px; background: linear-gradient(180deg, #f6eddd, var(--fondo)); border-bottom: 1px solid var(--linea); }
+  .testata-sito .contenitore { max-width: 1140px; margin: 0 auto; padding: 0 24px; }
+  .testata-sito .occhiello { display: inline-flex; align-items: center; gap: 10px; margin: 0 0 14px; font-size: 12.5px; font-weight: 400; letter-spacing: .2em; text-transform: uppercase; color: var(--rosso); }
+  .testata-sito .occhiello::before { content: ""; width: 22px; height: 1.5px; background: currentColor; }
+  .testata-sito h1 { text-align: left; font-weight: 300; font-size: clamp(38px, 5.4vw, 60px); line-height: 1.15; margin: 0 0 12px; color: var(--blu); }
+  .testata-sito .lead { font-size: 19.5px; color: #3b3d42; max-width: 680px; margin: 0; }
+  @media (max-width: 560px) {
+    .testata-sito { padding: 36px 0 28px; }
+    .pagina { padding: 48px 16px 64px; }
+    .testata-sito .contenitore { padding: 0 16px; }
+    .testata-sito .lead { font-size: 17.5px; }
+    .testata-sito h1 { font-size: clamp(38px, 5.4vw, 60px); }
+  }
+
   header { text-align:center; margin-bottom:32px; }
   .intestazione { display:block; width:100%; max-width:560px; height:auto; margin:0 auto; }
   .testata-mobile { display:none; }
@@ -26,8 +43,8 @@
 </style>
 <!--testa-barra-->
 <meta name="robots" content="noindex">
-<link rel="stylesheet" href="/font/font.css?v=20261026c">
-<link rel="stylesheet" href="/barra.css?v=20261026c">
+<link rel="stylesheet" href="/font/font.css?v=20261026d">
+<link rel="stylesheet" href="/barra.css?v=20261026d">
 <!--/testa-barra-->
 </head>
 <body>
@@ -57,10 +74,15 @@
 <div class="barra-spazio"></div>
 <!--/barra-->
 
-<div class="pagina">
+<section class="testata-sito">
+  <div class="contenitore">
+    <p class="occhiello">Privacy</p>
+    <h1>Informativa sul trattamento dei dati personali</h1>
+    <p class="lead">Ai sensi degli articoli 13 e 14 del Regolamento (UE) 2016/679 · aggiornata a ottobre 2026</p>
+  </div>
+</section>
 
-  <h1>Informativa sul trattamento dei dati personali</h1>
-  <div class="sotto">Ai sensi degli articoli 13 e 14 del Regolamento (UE) 2016/679 · aggiornata a ottobre 2026</div>
+<div class="pagina">
 
   <p>Questa informativa spiega come l'Associazione Italia Israele di Alessandria tratta i dati di chi chiede di diventarne socio o rinnova l'adesione.</p>
 
@@ -158,7 +180,7 @@
     </div>
   </div>
 </div>
-<script src="/barra.js?v=20261026c" defer></script>
+<script src="/barra.js?v=20261026d" defer></script>
 <!--/piede-->
 </body>
 </html>
