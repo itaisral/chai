@@ -30,7 +30,8 @@
     font-size: 17px;
     line-height: 1.6;
   }
-  .pagina { max-width: 720px; margin: 0 auto; padding: 64px 24px 64px; }
+  .pagina { max-width: 1140px; margin: 0 auto; padding: 64px 24px 64px; }
+  #modulo { scroll-margin-top: calc(var(--barra, 68px) + 28px); }
 
   header { text-align: center; margin-bottom: 36px; }
   .intestazione { display: block; width: 100%; height: auto; margin: 0 auto 8px; }
@@ -195,7 +196,7 @@
   .testata-sito .occhiello { display: inline-flex; align-items: center; gap: 10px; margin: 0 0 14px; font-size: 12.5px; font-weight: 400; letter-spacing: .2em; text-transform: uppercase; color: var(--rosso); }
   .testata-sito .occhiello::before { content: ""; width: 22px; height: 1.5px; background: currentColor; }
   .testata-sito h1 { text-align: left; font-weight: 300; font-size: clamp(38px, 5.4vw, 60px); line-height: 1.15; margin: 0 0 12px; color: var(--blu); }
-  .testata-sito .lead { font-size: 19.5px; color: #3b3d42; max-width: 680px; margin: 0; }
+  .testata-sito .lead { font-size: 19.5px; color: #3b3d42; max-width: none; margin: 0; }
   @media (max-width: 560px) {
     .testata-sito { padding: 36px 0 28px; }
     .pagina { padding: 48px 16px 64px; }
@@ -206,8 +207,8 @@
 </style>
 <!--testa-barra-->
 <meta name="robots" content="noindex">
-<link rel="stylesheet" href="/font/font.css?v=20261026d">
-<link rel="stylesheet" href="/barra.css?v=20261026d">
+<link rel="stylesheet" href="/font/font.css?v=20261028a">
+<link rel="stylesheet" href="/barra.css?v=20261028a">
 <!--/testa-barra-->
 </head>
 <body>
@@ -753,7 +754,7 @@ $("modulo").addEventListener("submit", async e => {
     </div>
   </div>
 </div>
-<script src="/barra.js?v=20261026d" defer></script>
+<script src="/barra.js?v=20261028a" defer></script>
 <!--/piede-->
 </body>
 </html>
